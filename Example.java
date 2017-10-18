@@ -22,23 +22,27 @@ public class Example extends Application{
         primaryStage.setTitle("Game");
         GridPane grid = new GridPane();
         for(int i = 0; i < 6; i++) {
-            ColumnConstraints column = new ColumnConstraints(80);
+            ColumnConstraints column = new ColumnConstraints(100);
             grid.getColumnConstraints().add(column);
         }
 
         for(int i = 0; i < 9; i++) {
-            RowConstraints row = new RowConstraints(80);
+            RowConstraints row = new RowConstraints(100);
             grid.getRowConstraints().add(row);
         }
         final Group root = new Group(grid);
         grid.setStyle("-fx-background-color: black; -fx-grid-lines-visible: true");
         grid.setTranslateX(100);
         grid.setTranslateY(100);
-        Scene scene = new Scene(root, (6 * 80) + 100, (9 * 80) + 100, Color.BLACK);
+        Scene scene = new Scene(root, (6 * 100) + 100, (9 * 100) + 100, Color.BLACK);
         grid.setOnMouseClicked(event ->{
         	Sphere sphere = new Sphere(20);
-        	sphere.setTranslateX(event.getSceneX());
-        	sphere.setTranslateY(event.getSceneY());
+        	
+        	
+        	int x = (int)event.getSceneX()/100;
+        	int y = (int)event.getSceneY()/100;
+        	sphere.setTranslateX(((x + x + 1)/2.0)*100);
+        	sphere.setTranslateY(((y + y + 1)/2.0)*100);
         	sphere.setVisible(true);
         	root.getChildren().add(sphere);
         });
