@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane blendMode="DIFFERENCE" cache="true" prefHeight="297.0" prefWidth="220.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="application.menu">
+  <!-- TODO Add Nodes -->
+  <children>
+    <ComboBox fx:id="sel_player" layoutX="58.0" layoutY="83.0" prefHeight="21.0" prefWidth="104.0" promptText="Select Players">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <TextField alignment="TOP_CENTER" disable="false" editable="false" focusTraversable="false" layoutX="0.0" layoutY="1.0" prefHeight="21.000099999997474" prefWidth="220.0" text="CHAIN REACTION">
+      <effect>
+        <Lighting>
+          <bumpInput>
+            <Shadow />
+          </bumpInput>
+          <light>
+            <javafx.scene.effect.Light.Distant color="#dfdfdf" />
+          </light>
+        </Lighting>
+      </effect>
+    </TextField>
+    <Button id="btnPlay_HD" fx:id="play_HD" layoutX="82.0" layoutY="133.0" mnemonicParsing="false" text="Play With HD Grid" />
+    <Button id="btnSetting" fx:id="setting" layoutX="157.0" layoutY="273.0" mnemonicParsing="false" text="Settings" />
+    <Button id="btnPlay" fx:id="play" layoutX="22.0" layoutY="133.0" mnemonicParsing="false" onAction="#initialize" text="Play" />
+  </children>
+</AnchorPane>
