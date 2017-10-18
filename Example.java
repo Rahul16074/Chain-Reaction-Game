@@ -1,4 +1,5 @@
-package Chain_reaction;
+package application;
+
 
 import javafx.application.Application;
 import javafx.geometry.HPos;
@@ -11,10 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
-public class Example extends Application{
+public class Example{
 	
-	public void start(Stage primaryStage) {
-        primaryStage.setTitle("Game");
+	public void start() {
+        Stage primaryStage=new Stage();
+		primaryStage.setTitle("Game");
         GridPane grid = new GridPane();
         for(int i = 0; i < 6; i++) {
             ColumnConstraints column = new ColumnConstraints(100);
@@ -76,8 +78,11 @@ public class Example extends Application{
         primaryStage.show();
     }
 
-	
+	public void run()
+	{
+		this.start();
+	}
 	public static void main(String[] args) {
-        launch(args);
+        
     }
 }
