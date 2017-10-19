@@ -19,6 +19,11 @@ public class Player_Setting{
         Stage primaryStage=new Stage();
 		primaryStage.setTitle("Chain Reaction Preferences");
         ListView<String> list=new ListView<String>();
+        Individual_Setting[] setting_arr=new Individual_Setting[8];
+        for(int i=0;i<8;i++)
+        {
+        	setting_arr[i]=new Individual_Setting();
+        }
         list.getItems().add("Player1 Setting");
         list.getItems().add("Player2 Setting");
         list.getItems().add("Player3 Setting");
@@ -27,9 +32,14 @@ public class Player_Setting{
         list.getItems().add("Player6 Setting");
         list.getItems().add("Player7 Setting");
         list.getItems().add("Player8 Setting");
+        list.setOnMousePressed(event->{
+        	int t=list.getSelectionModel().getSelectedIndex();
+        	setting_arr[t].run();
+        });
 		Scene scene = new Scene(list, 220,299, Color.BLACK);     
         primaryStage.setScene(scene);
         primaryStage.show();
+        
     }
 
 	public void run()
