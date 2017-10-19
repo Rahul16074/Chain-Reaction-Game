@@ -34,7 +34,10 @@ public class Player_Setting{
         list.getItems().add("Player8 Setting");
         list.setOnMousePressed(event->{
         	int t=list.getSelectionModel().getSelectedIndex();
-        	setting_arr[t].run();
+        	if(t<8 && t>-1)
+        	{
+        		setting_arr[t].run();
+        	}
         });
 		Scene scene = new Scene(list, 220,299, Color.BLACK);     
         primaryStage.setScene(scene);
