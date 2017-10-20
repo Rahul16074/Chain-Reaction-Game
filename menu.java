@@ -60,7 +60,14 @@ public class menu implements javafx.fxml.Initializable{
 		play.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
-				Example ex=new Example();
+				Normal_Grid ex=new Normal_Grid();
+				ex.run();
+			}
+		});
+		play_HD.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle (ActionEvent e){
+				HD_Grid ex=new HD_Grid();
 				ex.run();
 			}
 		});
