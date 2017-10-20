@@ -10,7 +10,7 @@
 <AnchorPane blendMode="DIFFERENCE" cache="true" prefHeight="297.0" prefWidth="220.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="application.menu">
   <!-- TODO Add Nodes -->
   <children>
-    <ComboBox fx:id="sel_player" layoutX="58.0" layoutY="83.0" prefHeight="21.0" prefWidth="104.0" promptText="Select Players">
+    <ComboBox fx:id="sel_player" layoutX="58.0" layoutY="73.0" prefHeight="21.0" prefWidth="104.0" promptText="Select Players">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -31,8 +31,9 @@
         </Lighting>
       </effect>
     </TextField>
-    <Button id="btnPlay_HD" fx:id="play_HD" layoutX="82.0" layoutY="133.0" mnemonicParsing="false" text="Play With HD Grid" />
-    <Button id="btnSetting" fx:id="setting" layoutX="157.0" layoutY="273.0" mnemonicParsing="false" text="Settings" />
-    <Button id="btnPlay" fx:id="play" layoutX="22.0" layoutY="133.0" mnemonicParsing="false" onAction="#initialize" text="Play" />
+    <Button fx:id="btnPlay_HD" layoutX="82.0" layoutY="155.0" mnemonicParsing="false" text="Play With HD Grid" />
+    <Button fx:id="btnSetting" layoutX="157.0" layoutY="273.0" mnemonicParsing="false" onAction="#initialize" text="Settings" />
+    <Button fx:id="btnPlay" layoutX="22.0" layoutY="155.0" mnemonicParsing="false" onAction="#initialize" text="Play" />
+    <Button fx:id="btnResume" layoutX="82.0" layoutY="116.0" mnemonicParsing="false" text="Resume" />
   </children>
 </AnchorPane>
