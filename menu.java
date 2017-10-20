@@ -22,24 +22,26 @@ public class menu implements javafx.fxml.Initializable{
 	    private URL location;
 
 	    @FXML
-	    private Button play;
+	    private Button btnPlay;
 
 	    @FXML
-	    private Button play_HD;
+	    private Button btnPlay_HD;
 
 	    @FXML
 	    private ComboBox<String> sel_player;
 
 	    @FXML
-	    private Button setting;
+	    private Button btnSetting;
 
+	    @FXML
+	    private Button btnResume;
 
 	    @FXML
 	    void initialize() {
-	        assert play != null : "fx:id=\"play\" was not injected: check your FXML file 'main_menu.fxml'.";
-	        assert play_HD != null : "fx:id=\"play_HD\" was not injected: check your FXML file 'main_menu.fxml'.";
+	        assert btnPlay != null : "fx:id=\"play\" was not injected: check your FXML file 'main_menu.fxml'.";
+	        assert btnPlay_HD != null : "fx:id=\"play_HD\" was not injected: check your FXML file 'main_menu.fxml'.";
 	        assert sel_player != null : "fx:id=\"sel_player\" was not injected: check your FXML file 'main_menu.fxml'.";
-	        assert setting != null : "fx:id=\"setting\" was not injected: check your FXML file 'main_menu.fxml'.";
+	        assert btnSetting != null : "fx:id=\"setting\" was not injected: check your FXML file 'main_menu.fxml'.";
 
 
 	    }
@@ -57,22 +59,21 @@ public class menu implements javafx.fxml.Initializable{
 		sel_player.getItems().add("7");
 		sel_player.getItems().add("8");
 		
-		play.setOnAction(new EventHandler<ActionEvent>(){
+		btnPlay.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
 				Normal_Grid ex=new Normal_Grid();
 				ex.run();
 			}
 		});
-		play_HD.setOnAction(new EventHandler<ActionEvent>(){
+		btnPlay_HD.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
 				ex.run();
 			}
 		});
-		setting.setOnAction(new EventHandler<ActionEvent>(){
-
+		btnSetting.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
