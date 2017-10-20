@@ -1,6 +1,4 @@
 package application;
-
-
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.scene.Group;
@@ -50,6 +48,5 @@ public class Player_Setting{
 		this.start();
 	}
 	public static void main(String[] args) {
-        
     }
 }
