@@ -150,10 +150,11 @@ public class Normal_Grid
             grid.add(sphere2,x,y);
 			grid.add(circle,x,y);
 			box[y][x].setCount();
+			box[y][x].setSphere2(sphere);
 			box[y][x].setSphere3(sphere2);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2, Box box[][], GridPane grid)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -166,22 +167,26 @@ public class Normal_Grid
         sphere1.setMaterial(material);
         sphere1.setEffect(new Lighting());
         
-		Line line = new Line(125 + x1*50,125 + y1*50,125 + x2*50,125 + y2*50);
+		Line line = new Line(p1,q1,p2,q2);
+		line.setStroke(Color.TRANSPARENT);
+		
 		
 		PathTransition transitionCircle = new PathTransition();
 		transitionCircle.setPath(line);
 		transitionCircle.setNode(sphere1);
 		transitionCircle.setInterpolator(Interpolator.LINEAR);
-		transitionCircle.setDuration(Duration.seconds(2));
+		transitionCircle.setDuration(Duration.seconds(0.3));
 		transitionCircle.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-		transitionCircle.setCycleCount(Timeline.INDEFINITE);
+		transitionCircle.setCycleCount(1);
 		transitionCircle.play();
 		
 		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
         animationTimeLine.setCycleCount(Timeline.INDEFINITE);
         animationTimeLine.play();
         GridPane.setHalignment(sphere1, HPos.CENTER);
+        GridPane.setHalignment(line, HPos.CENTER);
         grid.add(sphere1,x2,y2);
+        grid.add(line,x1,y1);
         if(box[y2][x2] == null)
     	{
     		box[y2][x2] = new Box();
@@ -191,10 +196,10 @@ public class Normal_Grid
 	
 	public void splitmain(int x, int y, Box box[][], GridPane grid)
 	{
-		split(x,y,x+1,y,box,grid);
-		split(x,y,x-1,y,box,grid);
-		split(x,y,x,y+1,box,grid);
-		split(x,y,x,y-1,box,grid);
+		split(x,y,x+1,y,-50,0,10,0,box,grid);
+		split(x,y,x-1,y,50,0,-10,0,box,grid);
+		split(x,y,x,y+1,0,-50,0,10,box,grid);
+		split(x,y,x,y-1,0,50,0,-10,box,grid);
 	}
 	
 	
@@ -270,6 +275,9 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3)
         	{
+        		//Line line = new Line(0,0,100,100);
+        		//line.setStroke(Color.WHITE);
+        		//grid.add(line, y, x);
         		splitmain(x,y,box,grid);
         	}
         });
