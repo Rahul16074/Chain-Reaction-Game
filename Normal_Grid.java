@@ -31,7 +31,8 @@ public class Normal_Grid
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+    	material.setDiffuseColor(Color.RED);
+        //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
         sphere.setMaterial(material);
         sphere.setEffect(new Lighting());
 		
@@ -59,7 +60,8 @@ public class Normal_Grid
 		{
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
-            material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+        	material.setDiffuseColor(Color.RED);
+            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
 			
@@ -109,12 +111,14 @@ public class Normal_Grid
 		{
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
-            material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+        	material.setDiffuseColor(Color.RED);
+            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
     		
     		Sphere sphere2 = new Sphere(10);
-            material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+    		material.setDiffuseColor(Color.RED);
+            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere2.setMaterial(material);
             sphere2.setEffect(new Lighting());
 			
@@ -172,7 +176,8 @@ public class Normal_Grid
 		
 		Sphere sphere1 = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+    	material.setDiffuseColor(Color.RED);
+        //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
         sphere1.setMaterial(material);
         sphere1.setEffect(new Lighting());
         
