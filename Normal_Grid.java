@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -96,6 +97,10 @@ public class Normal_Grid
 			box[y][x].setCount();
 			box[y][x].setSphere2(sphere);
 		}
+		else
+		{
+			splitmain(x,y,box,grid);
+		}
 	}
 	
 	public void two(int x, int y, Box box[][], GridPane grid)
@@ -153,6 +158,10 @@ public class Normal_Grid
 			box[y][x].setSphere2(sphere);
 			box[y][x].setSphere3(sphere2);
 		}
+		else
+		{
+			splitmain(x,y,box,grid);
+		}
 	}
 	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid)
 	{
@@ -180,26 +189,64 @@ public class Normal_Grid
 		transitionCircle.setCycleCount(1);
 		transitionCircle.play();
 		
+		
 		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
         animationTimeLine.setCycleCount(Timeline.INDEFINITE);
         animationTimeLine.play();
         GridPane.setHalignment(sphere1, HPos.CENTER);
         GridPane.setHalignment(line, HPos.CENTER);
-        grid.add(sphere1,x2,y2);
-        grid.add(line,x1,y1);
-        if(box[y2][x2] == null)
-    	{
-    		box[y2][x2] = new Box();
-    	}
-        box[y2][x2].setCount();
+        grid.add(sphere1,x1,y1);
+        //grid.add(line,x1,y1);
+        
+        transitionCircle.setOnFinished((ActionEvent event) -> {
+        	
+        	grid.getChildren().remove(sphere1);
+        	
+        	if(box[y2][x2] == null)
+        	{
+        		box[y2][x2] = new Box();
+        	}
+        	
+        	if(box[y2][x2].getCount() == 0)
+        	{
+        		zero(x2,y2,box,grid);
+        	}
+        	else if(box[y2][x2].getCount() == 1)
+        	{       
+        		one(x2,y2,box,grid);       		
+        	}
+        	else if(box[y2][x2].getCount() == 2)
+            {        	
+        		two(x2,y2,box,grid);      		
+            }
+        	else if(box[y2][x2].getCount() == 3)
+        	{
+        		splitmain(x2,y2,box,grid);
+        	}
+ 		   
+		});
+        
+        
 	}
 	
 	public void splitmain(int x, int y, Box box[][], GridPane grid)
 	{
-		split(x,y,x+1,y,-50,0,10,0,box,grid);
-		split(x,y,x-1,y,50,0,-10,0,box,grid);
-		split(x,y,x,y+1,0,-50,0,10,box,grid);
-		split(x,y,x,y-1,0,50,0,-10,box,grid);
+		if(x+1<=5)
+		{
+			split(x,y,x+1,y,0,0,50,0,box,grid);
+		}
+		if(x-1>=0)
+		{
+			split(x,y,x-1,y,0,0,-50,0,box,grid);
+		}
+		if(y+1<=8)
+		{
+			split(x,y,x,y+1,0,0,0,50,box,grid);
+		}
+		if(y-1>=0)
+		{
+			split(x,y,x,y-1,0,0,0,-50,box,grid);
+		}
 	}
 	
 	
