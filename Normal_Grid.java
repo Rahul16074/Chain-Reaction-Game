@@ -18,6 +18,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -152,15 +153,48 @@ public class Normal_Grid
 			box[y][x].setSphere3(sphere2);
 		}
 	}
-	public void splitleft(int x, int y, Box box[][], GridPane grid)
+	public void split(int x1, int y1,int x2, int y2, Box box[][], GridPane grid)
 	{
-		if(x-1>=0)
-		{
-			if(box[y][x-1].getCount()==0)
-			{
-				
-			}
-		}
+		grid.getChildren().remove(box[y1][x1].getSphere1());
+		grid.getChildren().remove(box[y1][x1].getSphere2());
+		grid.getChildren().remove(box[y1][x1].getSphere3());
+		box[y1][x1].setempty();
+		
+		Sphere sphere1 = new Sphere(10);
+    	PhongMaterial material = new PhongMaterial();
+        material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+        sphere1.setMaterial(material);
+        sphere1.setEffect(new Lighting());
+        
+		Line line = new Line(125 + x1*50,125 + y1*50,125 + x2*50,125 + y2*50);
+		
+		PathTransition transitionCircle = new PathTransition();
+		transitionCircle.setPath(line);
+		transitionCircle.setNode(sphere1);
+		transitionCircle.setInterpolator(Interpolator.LINEAR);
+		transitionCircle.setDuration(Duration.seconds(2));
+		transitionCircle.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+		transitionCircle.setCycleCount(Timeline.INDEFINITE);
+		transitionCircle.play();
+		
+		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
+        animationTimeLine.setCycleCount(Timeline.INDEFINITE);
+        animationTimeLine.play();
+        GridPane.setHalignment(sphere1, HPos.CENTER);
+        grid.add(sphere1,x2,y2);
+        if(box[y2][x2] == null)
+    	{
+    		box[y2][x2] = new Box();
+    	}
+        box[y2][x2].setCount();
+	}
+	
+	public void splitmain(int x, int y, Box box[][], GridPane grid)
+	{
+		split(x,y,x+1,y,box,grid);
+		split(x,y,x-1,y,box,grid);
+		split(x,y,x,y+1,box,grid);
+		split(x,y,x,y-1,box,grid);
 	}
 	
 	
@@ -236,7 +270,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3)
         	{
-        		
+        		splitmain(x,y,box,grid);
         	}
         });
 
