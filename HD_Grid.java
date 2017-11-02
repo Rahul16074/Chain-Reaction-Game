@@ -5,9 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -69,30 +67,30 @@ public class HD_Grid
         grid.setTranslateX(100);
         grid.setTranslateY(100);
         Scene scene = new Scene(root, 550,800, Color.BLACK);
-        Check check[][] = new Check[16][10];
+        Box box[][] = new Box[16][10];
         
         grid.setOnMouseClicked(event ->
         {
         	Sphere sphere = new Sphere(7);
         	PhongMaterial material = new PhongMaterial();
-            material.setDiffuseMap(new Image(getClass().getResource("green.jpg").toExternalForm()));
+            material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
         	int x = (int)(event.getSceneX()-100)/35;
         	int y = (int)(event.getSceneY()-100)/35;
-        	if(check[y][x] == null)
+        	if(box[y][x] == null)
         	{
-        		check[y][x] = new Check();
+        		box[y][x] = new Box();
         	}
-        	if(check[y][x].getCount() == 1)
+        	if(box[y][x].getCount() == 1)
         	{
         		if((x!=0 || y!=0) &&  (x!=0 || y!=15) && (x!=9 || y!=0) && (x!=9 || y!=15) )
         		{
         			Circle circle = new Circle(10,Color.TRANSPARENT);
         			circle.setCenterX(0);
         			circle.setCenterY(0);
-        			circle.translateXProperty().bind(check[y][x].getSphere1().translateXProperty());
-        			circle.translateYProperty().bind(check[y][x].getSphere1().translateYProperty());
+        			circle.translateXProperty().bind(box[y][x].getSphere1().translateXProperty());
+        			circle.translateYProperty().bind(box[y][x].getSphere1().translateYProperty());
         			circle.setRadius(7);
    			
         			PathTransition transitionCircle = new PathTransition();
@@ -119,14 +117,14 @@ public class HD_Grid
                     GridPane.setHalignment(circle, HPos.CENTER);
         			grid.add(sphere,x,y);
         			grid.add(circle,x,y);
-        			check[y][x].setCount();
-        			check[y][x].setSphere2(sphere);
+        			box[y][x].setCount();
+        			box[y][x].setSphere2(sphere);
         		}    		
         	}
-        	else if(check[y][x].getCount() == 2)
+        	else if(box[y][x].getCount() == 2)
             {
         		Sphere sphere2 = new Sphere(7);
-                material.setDiffuseMap(new Image(getClass().getResource("green.jpg").toExternalForm()));
+                material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
                 sphere2.setMaterial(material);
                 sphere2.setEffect(new Lighting());
         		if(x!=0 && x!=9 && y!=0 && y!=15)
@@ -134,11 +132,11 @@ public class HD_Grid
         			Circle circle = new Circle(10,Color.TRANSPARENT);
         			circle.setCenterX(0);
         			circle.setCenterY(0);
-        			circle.translateXProperty().bind(check[y][x].getSphere1().translateXProperty());
-        			circle.translateYProperty().bind(check[y][x].getSphere1().translateYProperty());
+        			circle.translateXProperty().bind(box[y][x].getSphere1().translateXProperty());
+        			circle.translateYProperty().bind(box[y][x].getSphere1().translateYProperty());
         			circle.setRadius(7);
         			
-        			grid.getChildren().remove(check[y][x].getSphere2());
+        			grid.getChildren().remove(box[y][x].getSphere2());
         			
         			PathTransition transitionCircle = new PathTransition();
         			transitionCircle.setPath(circle);
@@ -167,10 +165,10 @@ public class HD_Grid
                     grid.add(sphere,x,y);
                     grid.add(sphere2,x,y);
         			grid.add(circle,x,y);
-        			check[y][x].setCount();
+        			box[y][x].setCount();
         		}
             }
-        	else if(check[y][x].getCount() == 0)
+        	else if(box[y][x].getCount() == 0)
         	{
         		grid.add(sphere, x, y);
         		if((x==0 && y==0) ||  (x==0 && y==15) || (x==9 && y==0) || (x==9 && y==15))
@@ -186,8 +184,8 @@ public class HD_Grid
                     animationTimeLine.play();
         		}
         		GridPane.setHalignment(sphere, HPos.CENTER);
-        		check[y][x].setCount();
-        		check[y][x].setSphere1(sphere);
+        		box[y][x].setCount();
+        		box[y][x].setSphere1(sphere);
         	}
         });
 
