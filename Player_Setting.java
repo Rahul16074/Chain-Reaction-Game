@@ -1,21 +1,15 @@
 package application;
-import javafx.application.Application;
-import javafx.geometry.HPos;
-import javafx.scene.Group;
+
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 
 public class Player_Setting{
 	
 	public void start() {
         Stage primaryStage=new Stage();
-		primaryStage.setTitle("Chain Reaction Preferences");
+        primaryStage.setTitle("Chain Reaction Preferences");
         ListView<String> list=new ListView<String>();
         Individual_Setting[] setting_arr=new Individual_Setting[8];
         for(int i=0;i<8;i++)
@@ -37,8 +31,9 @@ public class Player_Setting{
         		setting_arr[t].run();
         	}
         });
-		Scene scene = new Scene(list, 220,299, Color.BLACK);     
-        primaryStage.setScene(scene);
+		Scene scene = new Scene(list, 298,387, Color.BLACK);     
+		scene.fillProperty();
+		primaryStage.setScene(scene);
         primaryStage.show();
         
     }
@@ -48,5 +43,6 @@ public class Player_Setting{
 		this.start();
 	}
 	public static void main(String[] args) {
+        
     }
 }
