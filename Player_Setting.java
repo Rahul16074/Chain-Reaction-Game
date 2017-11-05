@@ -1,5 +1,8 @@
 package application;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
@@ -28,7 +31,22 @@ public class Player_Setting{
         	int t=list.getSelectionModel().getSelectedIndex();
         	if(t<8 && t>-1)
         	{
-        		setting_arr[t].run();
+        		try 
+        		{
+					setting_arr[t].run(t+1);
+				} 
+        		catch (FileNotFoundException e) 
+        		{
+					e.printStackTrace();
+				} 
+        		catch (ClassNotFoundException e) 
+        		{
+					e.printStackTrace();
+				}
+        		catch (IOException e) 
+        		{
+					e.printStackTrace();
+				}
         	}
         });
 		Scene scene = new Scene(list, 298,387, Color.BLACK);     
