@@ -14,6 +14,13 @@ public class Box
 	{
 		count = 0;
 	}
+	public void setempty(){
+		this.count=0;
+		this.sphere1=null;
+		this.sphere2=null;
+		this.sphere3=null;
+		
+	}
 	public int getCount() 
 	{
 		return count;
