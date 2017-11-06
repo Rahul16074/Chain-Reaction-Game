@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.Lighting;
@@ -23,6 +24,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 public class Normal_Grid
@@ -121,7 +124,8 @@ public class Normal_Grid
             //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere2.setMaterial(material);
             sphere2.setEffect(new Lighting());
-			
+
+            
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
 			circle.setCenterY(0);
@@ -298,6 +302,7 @@ public class Normal_Grid
         grid.setTranslateY(100);
         Scene scene = new Scene(root, 530,600, Color.BLACK);
         Box box[][] = new Box[9][6];
+        ObservableList<Node> list = FXCollections.observableArrayList();
         
         grid.setOnMouseClicked(event ->
         {
@@ -332,6 +337,11 @@ public class Normal_Grid
         		//grid.add(line, y, x);
         		splitmain(x,y,box,grid);
         	}
+        	list.remove(0, list.size());
+        	list.addAll(grid.getChildren());
+        	for(Node a:list){
+        		System.out.println(a.idProperty());
+        	}
         });
 
         btnExit.setOnAction(event->
@@ -349,6 +359,12 @@ public class Normal_Grid
         {
         	Player_Setting p=new Player_Setting();
         	p.run();
+        });
+        btnUndo.setOnAction(event->
+        {
+        	//grid.getChildren().remove(0,grid.getChildren().size());
+        	grid.getChildren().setAll(list);
+        	System.out.println("Hello");
         });
         
         primaryStage.setScene(scene);
