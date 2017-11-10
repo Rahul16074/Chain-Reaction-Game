@@ -98,7 +98,7 @@ public class Normal_Grid
             GridPane.setHalignment(sphere, HPos.CENTER);
             GridPane.setHalignment(circle, HPos.CENTER);
 			grid.add(sphere,x,y);
-			grid.add(circle,x,y);
+			//grid.add(circle,x,y);
 			box[y][x].setCount();
 			box[y][x].setSphere2(sphere);
 		}
@@ -161,7 +161,7 @@ public class Normal_Grid
             GridPane.setHalignment(circle, HPos.CENTER);
             grid.add(sphere,x,y);
             grid.add(sphere2,x,y);
-			grid.add(circle,x,y);
+			//grid.add(circle,x,y);
 			box[y][x].setCount();
 			box[y][x].setSphere2(sphere);
 			box[y][x].setSphere3(sphere2);
@@ -196,8 +196,7 @@ public class Normal_Grid
 		transitionCircle.setDuration(Duration.seconds(0.3));
 		transitionCircle.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		transitionCircle.setCycleCount(1);
-		transitionCircle.play();
-		
+		transitionCircle.play();		
 		
 		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
         animationTimeLine.setCycleCount(Timeline.INDEFINITE);
@@ -302,15 +301,27 @@ public class Normal_Grid
         grid.setTranslateY(100);
         Scene scene = new Scene(root, 530,600, Color.BLACK);
         Box box[][] = new Box[9][6];
+        Box prev[][] = new Box[9][6];
         ObservableList<Node> list = FXCollections.observableArrayList();
+        list.addAll(grid.getChildren());
         
         grid.setOnMouseClicked(event ->
         {
-        	//Sphere sphere = new Sphere(10);
-        	//PhongMaterial material = new PhongMaterial();
-            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
-            //sphere.setMaterial(material);
-            //sphere.setEffect(new Lighting());
+        	list.remove(0, list.size());
+        	list.addAll(grid.getChildren());
+        	
+        	for(int i=0;i<9;i++)
+        	{
+        		for(int j=0;j<6;j++)
+        		{
+        			prev[i][j] = new Box();
+        			if(box[i][j]!=null)
+        			{
+        				prev[i][j].copy(box[i][j]);
+        			}
+        		}
+        	}
+        	
         	int x = (int)(event.getSceneX()-100)/50;
         	int y = (int)(event.getSceneY()-100)/50;
         	if(box[y][x] == null)
@@ -332,16 +343,12 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3)
         	{
-        		//Line line = new Line(0,0,100,100);
-        		//line.setStroke(Color.WHITE);
-        		//grid.add(line, y, x);
         		splitmain(x,y,box,grid);
         	}
-        	list.remove(0, list.size());
-        	list.addAll(grid.getChildren());
-        	for(Node a:list){
-        		System.out.println(a.idProperty());
-        	}
+        	//for(Node a:list){
+        	//	System.out.println(a.idProperty());
+        	//}
+        	//System.out.println();
         });
 
         btnExit.setOnAction(event->
@@ -362,9 +369,25 @@ public class Normal_Grid
         });
         btnUndo.setOnAction(event->
         {
-        	//grid.getChildren().remove(0,grid.getChildren().size());
+        	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
-        	System.out.println("Hello");
+        	//for(Node a:grid.getChildren()){
+        	//	System.out.println(a.idProperty());
+        	//}
+        	//System.out.println();
+        	//System.out.println("Hello");
+        	
+        	for(int i=0;i<9;i++)
+        	{
+        		for(int j=0;j<6;j++)
+        		{
+        			box[i][j] = new Box();
+        			if(prev[i][j]!=null)
+        			{
+        				box[i][j].copy(prev[i][j]);
+        			}
+        		}
+        	}
         });
         
         primaryStage.setScene(scene);

@@ -14,6 +14,15 @@ public class Box
 	{
 		count = 0;
 	}
+	public void copy(Box box)
+	{
+		this.count = box.getCount();
+		this.sphere1 = box.getSphere1();
+		this.sphere2 = box.getSphere2();
+		this.sphere3 = box.getSphere3();
+		this.color = box.getColor();
+	}
+	
 	public void setempty(){
 		this.count=0;
 		this.sphere1=null;
