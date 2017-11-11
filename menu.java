@@ -105,7 +105,24 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
-				ex.run();
+				Block_serialize[][] sbox=new Block_serialize[16][10];
+				for(int i=0;i<16;i++)
+				{
+					for(int j=0;j<10;j++)
+					{
+						sbox[i][j]=new Block_serialize();
+					}
+				}
+				try {
+					storeGridState(sbox);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				ex.run(sbox);
 			}
 		});
 		btnSetting.setOnAction(new EventHandler<ActionEvent>(){
