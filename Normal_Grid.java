@@ -1,5 +1,15 @@
 package application;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -30,7 +40,7 @@ import javafx.collections.ObservableList;
 
 public class Normal_Grid
 {
-	public void zero(int x,int y, Box box[][], GridPane grid)
+	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
@@ -54,10 +64,23 @@ public class Normal_Grid
 		}
 		GridPane.setHalignment(sphere, HPos.CENTER);
 		box[y][x].setCount();
+		sbox[y][x].setSphereCount();
+		try 
+		{
+			store_state(sbox);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
@@ -100,15 +123,28 @@ public class Normal_Grid
 			grid.add(sphere,x,y);
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
+			sbox[y][x].setSphereCount();
+			try 
+			{
+				store_state(sbox);
+			} 
+			catch (FileNotFoundException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 			box[y][x].setSphere2(sphere);
 		}
 		else
 		{
-			splitmain(x,y,box,grid);
+			splitmain(x,y,box,grid, sbox);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
@@ -163,20 +199,46 @@ public class Normal_Grid
             grid.add(sphere2,x,y);
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
+			sbox[y][x].setSphereCount();
+			try 
+			{
+				store_state(sbox);
+			} 
+			catch (FileNotFoundException e) 
+			{
+				e.printStackTrace();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
 			box[y][x].setSphere2(sphere);
 			box[y][x].setSphere3(sphere2);
 		}
 		else
 		{
-			splitmain(x,y,box,grid);
+			splitmain(x,y,box,grid,sbox);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
 		grid.getChildren().remove(box[y1][x1].getSphere3());
 		box[y1][x1].setempty();
+		sbox[y1][x1].setEmpty();
+		try 
+		{
+			store_state(sbox);
+		} 
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 		
 		Sphere sphere1 = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
@@ -217,19 +279,19 @@ public class Normal_Grid
         	
         	if(box[y2][x2].getCount() == 0)
         	{
-        		zero(x2,y2,box,grid);
+        		zero(x2,y2,box,grid,sbox);
         	}
         	else if(box[y2][x2].getCount() == 1)
         	{       
-        		one(x2,y2,box,grid);       		
+        		one(x2,y2,box,grid,sbox);       		
         	}
         	else if(box[y2][x2].getCount() == 2)
             {        	
-        		two(x2,y2,box,grid);      		
+        		two(x2,y2,box,grid,sbox);      		
             }
         	else if(box[y2][x2].getCount() == 3)
         	{
-        		splitmain(x2,y2,box,grid);
+        		splitmain(x2,y2,box,grid,sbox);
         	}
  		   
 		});
@@ -237,28 +299,60 @@ public class Normal_Grid
         
 	}
 	
-	public void splitmain(int x, int y, Box box[][], GridPane grid)
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox)
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid);
+			split(x,y,x+1,y,0,0,50,0,box,grid,sbox);
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid);
+			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox);
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid);
+			split(x,y,x,y+1,0,0,0,50,box,grid,sbox);
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid);
+			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox);
 		}
 	}
 	
+	public void store_state(Block_serialize[][] sbox) throws FileNotFoundException, IOException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Block_state.txt";
+		ObjectOutputStream out=null;
+		out=new ObjectOutputStream(new FileOutputStream(location));
+		out.writeObject(sbox);
+		out.close();
+	}
 	
-	public void start() 
+	public Block_serialize[][] get_state() throws FileNotFoundException, IOException, ClassNotFoundException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Block_state.txt";
+		ObjectInputStream input=null;
+		Block_serialize[][] obj=null;
+		try
+		{
+			input=new ObjectInputStream(new FileInputStream(location));
+			obj= (Block_serialize[][])input.readObject();	
+		}
+		catch(EOFException e)
+		{
+			//System.out.println("added");
+			
+		}
+		input.close();
+		return obj;
+	}
+	public void start(Block_serialize[][] sbox) 
 	{
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
@@ -302,6 +396,7 @@ public class Normal_Grid
         Scene scene = new Scene(root, 530,600, Color.BLACK);
         Box box[][] = new Box[9][6];
         Box prev[][] = new Box[9][6];
+        
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
         
@@ -331,19 +426,19 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
-        		zero(x,y,box,grid);
+        		zero(x,y,box,grid,sbox);
         	}
         	else if(box[y][x].getCount() == 1)
         	{       
-        		one(x,y,box,grid);       		
+        		one(x,y,box,grid,sbox);       		
         	}
         	else if(box[y][x].getCount() == 2)
             {        	
-        		two(x,y,box,grid);      		
+        		two(x,y,box,grid,sbox);      		
             }
         	else if(box[y][x].getCount() == 3)
         	{
-        		splitmain(x,y,box,grid);
+        		splitmain(x,y,box,grid,sbox);
         	}
         	//for(Node a:list){
         	//	System.out.println(a.idProperty());
@@ -359,7 +454,14 @@ public class Normal_Grid
         btnNewGame.setOnAction(event->
         {
         	primaryStage.close();
-        	this.start();
+        	for(int i=0;i<9;i++)
+        	{
+        		for(int j=0;j<6;j++)
+        		{
+        			sbox[i][j].reset();
+        		}
+        	}
+        	this.start(sbox);
         });
         
         btnSetting.setOnAction(event->
@@ -393,9 +495,9 @@ public class Normal_Grid
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-	public void run()
+	public void run(Block_serialize[][] sbox)
 	{
-		this.start();
+		this.start(sbox);
 	}
 
 	public static void main(String[] args) 

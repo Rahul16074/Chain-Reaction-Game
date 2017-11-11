@@ -81,7 +81,24 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				Normal_Grid ex=new Normal_Grid();
-				ex.run();
+				Block_serialize[][] sbox=new Block_serialize[9][6];
+				for(int i=0;i<9;i++)
+				{
+					for(int j=0;j<6;j++)
+					{
+						sbox[i][j]=new Block_serialize();
+					}
+				}
+				try {
+					storeGridState(sbox);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				ex.run(sbox);
 			}
 		});
 		btnPlay_HD.setOnAction(new EventHandler<ActionEvent>(){
@@ -92,6 +109,16 @@ public class menu implements javafx.fxml.Initializable{
 			}
 		});
 		btnSetting.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				
+				Player_Setting p=new Player_Setting();
+				p.run();
+			}
+			
+		});
+		btnResume.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
@@ -119,6 +146,7 @@ public class menu implements javafx.fxml.Initializable{
         	
         });
 	}
+	
 	public int load() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		initializePlayers();
@@ -210,4 +238,15 @@ public class menu implements javafx.fxml.Initializable{
 		return;
 	}
 	
+	public void storeGridState(Block_serialize[][] sbox) throws FileNotFoundException, IOException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Block_state.txt";
+		ObjectOutputStream out=null;
+		out=new ObjectOutputStream(new FileOutputStream(location));
+		out.writeObject(sbox);
+		out.close();
+	}
 }

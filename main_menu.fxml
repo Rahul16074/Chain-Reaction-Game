@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane blendMode="DIFFERENCE" cache="true" prefHeight="297.0" prefWidth="220.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="application.menu">
+<AnchorPane blendMode="DIFFERENCE" cache="true" prefHeight="387.0" prefWidth="298.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="application.menu">
   <!-- TODO Add Nodes -->
   <children>
-    <ComboBox fx:id="sel_player" layoutX="58.0" layoutY="73.0" prefHeight="21.0" prefWidth="104.0" promptText="Select Players">
+    <ComboBox fx:id="sel_player" layoutX="81.0" layoutY="96.0" prefHeight="29.0" prefWidth="127.0" promptText="Select Players">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -19,7 +19,7 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <TextField alignment="TOP_CENTER" disable="false" editable="false" focusTraversable="false" layoutX="0.0" layoutY="1.0" prefHeight="21.000099999997474" prefWidth="220.0" text="CHAIN REACTION">
+    <TextField alignment="CENTER" disable="false" editable="false" focusTraversable="false" layoutX="0.0" layoutY="1.0" prefHeight="28.0" prefWidth="298.0" text="CHAIN REACTION">
       <effect>
         <Lighting>
           <bumpInput>
@@ -31,9 +31,9 @@
         </Lighting>
       </effect>
     </TextField>
-    <Button fx:id="btnPlay_HD" layoutX="82.0" layoutY="155.0" mnemonicParsing="false" text="Play With HD Grid" />
-    <Button fx:id="btnSetting" layoutX="157.0" layoutY="273.0" mnemonicParsing="false" onAction="#initialize" text="Settings" />
-    <Button fx:id="btnPlay" layoutX="22.0" layoutY="155.0" mnemonicParsing="false" onAction="#initialize" text="Play" />
-    <Button fx:id="btnResume" layoutX="82.0" layoutY="116.0" mnemonicParsing="false" text="Resume" />
+    <Button fx:id="btnPlay_HD" layoutX="136.0" layoutY="208.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="145.0" text="Play With HD Grid" />
+    <Button fx:id="btnSetting" layoutX="194.0" layoutY="356.0" mnemonicParsing="false" onAction="#initialize" prefHeight="29.0" prefWidth="104.0" text="Settings" />
+    <Button fx:id="btnPlay" layoutX="40.0" layoutY="208.0" mnemonicParsing="false" onAction="#initialize" prefHeight="29.0" prefWidth="63.0" text="Play" />
+    <Button fx:id="btnResume" layoutX="97.0" layoutY="156.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="104.0" text="Resume" />
   </children>
 </AnchorPane>
