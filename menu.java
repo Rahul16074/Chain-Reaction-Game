@@ -90,17 +90,23 @@ public class menu implements javafx.fxml.Initializable{
 						sbox[i][j]=new Block_serialize();
 					}
 				}
-				try {
+				try 
+				{
 					storeGridState(sbox);
-				} catch (FileNotFoundException e1) {
+				} 
+				catch (FileNotFoundException e1) 
+				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (IOException e1) {
+				} 
+				catch (IOException e1) 
+				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				int n=0;
-				try 
+				int n;
+				n=Integer.parseInt(sel_player.getValue());
+				/*try 
 				{
 					n=load();
 				} 
@@ -118,6 +124,15 @@ public class menu implements javafx.fxml.Initializable{
 				{
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
+				}*/
+				String num=sel_player.getValue();
+				try 
+				{
+					setPlayerCount(num);
+				} 
+				catch (IOException f) 
+				{
+					f.printStackTrace();
 				}
 				try 
 				{
@@ -163,24 +178,85 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				
+				int n=0;
+				Normal_Grid ex=new Normal_Grid();
+				try 
+				{
+					n=load();
+				} 
+				catch (FileNotFoundException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				catch (ClassNotFoundException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				catch (IOException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				Block_serialize[][] sbox=null;
+				try 
+				{
+					sbox=Normal_Grid.get_state();
+				} 
+				catch (FileNotFoundException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				catch (ClassNotFoundException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				catch (IOException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Player_turn pl=null;
+				try 
+				{
+					pl=get_playerturns();
+				} 
+				catch (FileNotFoundException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				catch (ClassNotFoundException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) 
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					ex.run(sbox, n, pl);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		});
 		sel_player.setOnAction(new EventHandler<ActionEvent>(){
 
 			@Override
-			public void handle(ActionEvent arg0) {
-				String num=sel_player.getValue();
-				try 
-				{
-					setPlayerCount(num);
-				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-				}
-				
+			public void handle(ActionEvent arg0) {				
 			}
         	
         });

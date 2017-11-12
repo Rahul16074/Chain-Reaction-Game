@@ -68,7 +68,7 @@ public class Normal_Grid
 		GridPane.setHalignment(sphere, HPos.CENTER);
 		box[y][x].setCount();
 		box[y][x].setColor(color);
-		sbox[y][x].setSphereCount();
+		sbox[y][x].setSphereCount(box[y][x].getCount());
 		sbox[y][x].setColor(color.toString());
 		try 
 		{
@@ -130,7 +130,7 @@ public class Normal_Grid
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount();
+			sbox[y][x].setSphereCount(box[y][x].getCount());
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -210,7 +210,7 @@ public class Normal_Grid
             
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount();
+			sbox[y][x].setSphereCount(box[y][x].getCount());
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -342,7 +342,7 @@ public class Normal_Grid
 		out.close();
 	}
 	
-	public Block_serialize[][] get_state() throws FileNotFoundException, IOException, ClassNotFoundException
+	static Block_serialize[][] get_state() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
@@ -459,22 +459,28 @@ public class Normal_Grid
         	{
         		zero(x,y,box,grid,sbox,color);
         		playerturn.increment();
+        		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
         		one(x,y,box,grid,sbox,color); 
         		playerturn.increment();
+        		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
         		two(x,y,box,grid,sbox,color);  
         		playerturn.increment();
+        		//currentStatus(sbox);
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
         		splitmain(x,y,box,grid,sbox,color);
         		playerturn.increment();
+        		//synchroniseState(box,sbox);
+        		//currentStatus(sbox);
         	}
+        	//System.out.println();
         });
 
         btnExit.setOnAction(event->
@@ -534,6 +540,32 @@ public class Normal_Grid
 		this.start(sbox,totnum, playerturn);
 	}
 
+	public void currentStatus(Block_serialize[][] sbox)
+	{
+		for(int i=0;i<9;i++)
+		{
+			for(int j=0;j<6;j++)
+			{
+				System.out.print(sbox[i][j].getColor()+" "+sbox[i][j].getSphereCount()+" ");
+			}
+			System.out.println();
+		}
+	}
+	
+	public void synchroniseState(Box[][] box, Block_serialize[][] sbox)
+	{
+		for(int i=0;i<9;i++)
+		{
+			for(int j=0;j<6;j++)
+			{
+				if(box[i][j]!=null && box[i][j].getColor()!=null)
+				{
+					System.out.println("At:"+i+" "+j);
+					sbox[i][j].setColor(box[i][j].getColor().toString());
+				}
+			}
+		}
+	}
 	public static void main(String[] args) 
 	{
     }

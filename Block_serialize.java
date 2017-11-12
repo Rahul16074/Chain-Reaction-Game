@@ -37,9 +37,9 @@ public class Block_serialize implements Serializable{
 		this.no_spheres=0;
 		this.color =null;
 	}
-	public void setSphereCount()
+	public void setSphereCount(int spheres)
 	{
-		no_spheres+=1;
+		no_spheres=spheres;
 	}
 	public void reset()
 	{
