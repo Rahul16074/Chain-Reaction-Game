@@ -6,17 +6,17 @@ import javafx.scene.paint.Paint;
 
 public class Block_serialize implements Serializable{
 	private int no_spheres;
-	private Paint color;
+	private String color;
 	public Block_serialize()
 	{
 		no_spheres=0;
 		color=null;
 	}
-	public Paint getColor()
+	public String getColor()
 	{
 		return color;
 	}
-	public void setColor(Paint color)
+	public void setColor(String color)
 	{
 		this.color=color;
 	}
@@ -34,7 +34,8 @@ public class Block_serialize implements Serializable{
 	}
 	public void setEmpty()
 	{
-		no_spheres=0;
+		this.no_spheres=0;
+		this.color =null;
 	}
 	public void setSphereCount()
 	{

@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -98,31 +99,54 @@ public class menu implements javafx.fxml.Initializable{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				ex.run(sbox);
-			}
-		});
-		btnPlay_HD.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle (ActionEvent e){
-				HD_Grid ex=new HD_Grid();
-				Block_serialize[][] sbox=new Block_serialize[16][10];
-				for(int i=0;i<16;i++)
+				int n=0;
+				try 
 				{
-					for(int j=0;j<10;j++)
-					{
-						sbox[i][j]=new Block_serialize();
-					}
+					n=load();
+				} 
+				catch (FileNotFoundException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				catch (ClassNotFoundException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} 
+				catch (IOException e2) 
+				{
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
-				try {
-					storeGridState(sbox);
+				try 
+				{
+					Boolean[] b=new Boolean[8];
+					Arrays.fill(b, false);
+					for(int i=0;i<n;i++)
+					{
+						b[i]=true;
+					}
+					Player_turn obj=new Player_turn(b);
+					set_playerturns(obj);
+					ex.run(sbox,n,obj);
 				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				ex.run(sbox);
+			}
+		});
+		btnPlay_HD.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle (ActionEvent e){
+				HD_Grid ex=new HD_Grid();
+				ex.run();
 			}
 		});
 		btnSetting.setOnAction(new EventHandler<ActionEvent>(){
@@ -140,8 +164,6 @@ public class menu implements javafx.fxml.Initializable{
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
 				
-				Player_Setting p=new Player_Setting();
-				p.run();
 			}
 			
 		});
@@ -266,4 +288,41 @@ public class menu implements javafx.fxml.Initializable{
 		out.writeObject(sbox);
 		out.close();
 	}
+	
+	public void set_playerturns(Player_turn obj) throws FileNotFoundException, IOException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Player_turn.txt";
+		ObjectOutputStream out=null;
+		out=new ObjectOutputStream(new FileOutputStream(location));
+		out.writeObject(obj);
+		out.close();
+	}
+	
+	public Player_turn get_playerturns() throws FileNotFoundException, IOException, ClassNotFoundException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Player_turn.txt";
+		ObjectInputStream input=null;
+		Player_turn obj=null;
+		try
+		{
+			input=new ObjectInputStream(new FileInputStream(location));
+			obj= (Player_turn)input.readObject();	
+		}
+		catch(EOFException e)
+		{
+			
+			//System.out.println("added");
+			
+		}
+		input.close();
+		return obj;
+	}
+	
+	
 }

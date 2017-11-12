@@ -1,6 +1,7 @@
 package application;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -28,6 +31,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -40,11 +44,11 @@ import javafx.collections.ObservableList;
 
 public class Normal_Grid
 {
-	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
+	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
-    	material.setDiffuseColor(Color.RED);
+    	material.setDiffuseColor(color);
         //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
         sphere.setMaterial(material);
         sphere.setEffect(new Lighting());
@@ -64,7 +68,9 @@ public class Normal_Grid
 		}
 		GridPane.setHalignment(sphere, HPos.CENTER);
 		box[y][x].setCount();
+		box[y][x].setColor(color);
 		sbox[y][x].setSphereCount();
+		sbox[y][x].setColor(color.toString());
 		try 
 		{
 			store_state(sbox);
@@ -80,13 +86,13 @@ public class Normal_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
-        	material.setDiffuseColor(Color.RED);
+        	material.setDiffuseColor(color);
             //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
@@ -123,7 +129,9 @@ public class Normal_Grid
 			grid.add(sphere,x,y);
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
+			box[y][x].setColor(color);
 			sbox[y][x].setSphereCount();
+			sbox[y][x].setColor(color.toString());
 			try 
 			{
 				store_state(sbox);
@@ -140,23 +148,23 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid, sbox);
+			splitmain(x,y,box,grid, sbox, color);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
-        	material.setDiffuseColor(Color.RED);
+        	material.setDiffuseColor(color);
             //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
     		
     		Sphere sphere2 = new Sphere(10);
-    		material.setDiffuseColor(Color.RED);
+    		material.setDiffuseColor(color);
             //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere2.setMaterial(material);
             sphere2.setEffect(new Lighting());
@@ -199,7 +207,9 @@ public class Normal_Grid
             grid.add(sphere2,x,y);
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
+			box[y][x].setColor(color);
 			sbox[y][x].setSphereCount();
+			sbox[y][x].setColor(color.toString());
 			try 
 			{
 				store_state(sbox);
@@ -217,10 +227,10 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid,sbox);
+			splitmain(x,y,box,grid,sbox,color);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -242,8 +252,7 @@ public class Normal_Grid
 		
 		Sphere sphere1 = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
-    	material.setDiffuseColor(Color.RED);
-        //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
+    	material.setDiffuseColor(color);
         sphere1.setMaterial(material);
         sphere1.setEffect(new Lighting());
         
@@ -279,19 +288,19 @@ public class Normal_Grid
         	
         	if(box[y2][x2].getCount() == 0)
         	{
-        		zero(x2,y2,box,grid,sbox);
+        		zero(x2,y2,box,grid,sbox,color);
         	}
         	else if(box[y2][x2].getCount() == 1)
         	{       
-        		one(x2,y2,box,grid,sbox);       		
+        		one(x2,y2,box,grid,sbox,color);       		
         	}
         	else if(box[y2][x2].getCount() == 2)
             {        	
-        		two(x2,y2,box,grid,sbox);      		
+        		two(x2,y2,box,grid,sbox,color);      		
             }
         	else if(box[y2][x2].getCount() == 3)
         	{
-        		splitmain(x2,y2,box,grid,sbox);
+        		splitmain(x2,y2,box,grid,sbox,color);
         	}
  		   
 		});
@@ -299,23 +308,23 @@ public class Normal_Grid
         
 	}
 	
-	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox)
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color)
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid,sbox);
+			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color);
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox);
+			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color);
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid,sbox);
+			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color);
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox);
+			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color);
 		}
 	}
 	
@@ -352,10 +361,29 @@ public class Normal_Grid
 		input.close();
 		return obj;
 	}
-	public void start(Block_serialize[][] sbox) 
-	{
+	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn)  throws FileNotFoundException, ClassNotFoundException, IOException
+	{	
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
+        
+        Individual_Setting is = new Individual_Setting();
+        Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		File folder = new File(location);
+		File[] listOfFiles = folder.listFiles();
+		location=location+"\\savedSettings.txt";
+		is.load(location);
+		serializedSetting obj=is.read(location);
+		String[] pcolor = new String[8];
+		pcolor[0] = obj.color1;
+		pcolor[1] = obj.color2;
+		pcolor[2] = obj.color3;
+		pcolor[3] = obj.color4;
+		pcolor[4] = obj.color5;
+		pcolor[5] = obj.color6;
+		pcolor[6] = obj.color7;
+		pcolor[7] = obj.color8;
         
         Button btnUndo = new Button("Undo");
         Button btnNewGame = new Button("New Game");
@@ -400,6 +428,7 @@ public class Normal_Grid
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
         
+        
         grid.setOnMouseClicked(event ->
         {
         	list.remove(0, list.size());
@@ -417,6 +446,8 @@ public class Normal_Grid
         		}
         	}
         	
+        	String col = pcolor[playerturn.getCur_turn()];
+        	Color color = Color.valueOf(col);
         	int x = (int)(event.getSceneX()-100)/50;
         	int y = (int)(event.getSceneY()-100)/50;
         	if(box[y][x] == null)
@@ -426,19 +457,23 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
-        		zero(x,y,box,grid,sbox);
+        		zero(x,y,box,grid,sbox,color);
+        		playerturn.increment();
         	}
-        	else if(box[y][x].getCount() == 1)
+        	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
-        		one(x,y,box,grid,sbox);       		
+        		one(x,y,box,grid,sbox,color); 
+        		playerturn.increment();
         	}
-        	else if(box[y][x].getCount() == 2)
+        	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
-        		two(x,y,box,grid,sbox);      		
+        		two(x,y,box,grid,sbox,color);  
+        		playerturn.increment();
             }
-        	else if(box[y][x].getCount() == 3)
+        	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
-        		splitmain(x,y,box,grid,sbox);
+        		splitmain(x,y,box,grid,sbox,color);
+        		playerturn.increment();
         	}
         	//for(Node a:list){
         	//	System.out.println(a.idProperty());
@@ -461,7 +496,18 @@ public class Normal_Grid
         			sbox[i][j].reset();
         		}
         	}
-        	this.start(sbox);
+        	try {
+				this.start(sbox, totnum, playerturn);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         });
         
         btnSetting.setOnAction(event->
@@ -495,9 +541,9 @@ public class Normal_Grid
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-	public void run(Block_serialize[][] sbox)
+	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
-		this.start(sbox);
+		this.start(sbox,totnum, playerturn);
 	}
 
 	public static void main(String[] args) 

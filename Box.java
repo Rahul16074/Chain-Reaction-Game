@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Sphere;
 
 public class Box
@@ -8,7 +9,7 @@ public class Box
 	private Sphere sphere1;
 	private Sphere sphere2;
 	private Sphere sphere3;
-	private String color;
+	private Color color;
 
 	public Box()
 	{
@@ -28,6 +29,7 @@ public class Box
 		this.sphere1=null;
 		this.sphere2=null;
 		this.sphere3=null;
+		this.color =null;
 		
 	}
 	public int getCount() 
@@ -37,6 +39,10 @@ public class Box
 	public void setCount() 
 	{
 		this.count++;
+	}
+	public void setCount(int count)
+	{
+		this.count = count;
 	}
 	public Sphere getSphere1() 
 	{
@@ -58,10 +64,10 @@ public class Box
 	public void setSphere3(Sphere sphere3) {
 		this.sphere3 = sphere3;
 	}
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
-	public void setColor(String color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 }
