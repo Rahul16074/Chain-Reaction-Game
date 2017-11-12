@@ -49,7 +49,6 @@ public class Normal_Grid
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
     	material.setDiffuseColor(color);
-        //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
         sphere.setMaterial(material);
         sphere.setEffect(new Lighting());
 		
@@ -93,15 +92,16 @@ public class Normal_Grid
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
         	material.setDiffuseColor(color);
-            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
+            
+            grid.getChildren().remove(box[y][x].getSphere1());
+            box[y][x].setCount(box[y][x].getCount() - 1);
+            zero(x,y,box,grid,sbox,color);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
 			circle.setCenterY(0);
-			circle.translateXProperty().bind(box[y][x].getSphere1().translateXProperty());
-			circle.translateYProperty().bind(box[y][x].getSphere1().translateYProperty());
 			circle.setRadius(10);
 		
 			PathTransition transitionCircle = new PathTransition();
@@ -159,13 +159,11 @@ public class Normal_Grid
 			Sphere sphere = new Sphere(10);
         	PhongMaterial material = new PhongMaterial();
         	material.setDiffuseColor(color);
-            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
     		
     		Sphere sphere2 = new Sphere(10);
     		material.setDiffuseColor(color);
-            //material.setDiffuseMap(new Image(getClass().getResource("redmin.jpg").toExternalForm()));
             sphere2.setMaterial(material);
             sphere2.setEffect(new Lighting());
 
@@ -173,11 +171,13 @@ public class Normal_Grid
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
 			circle.setCenterY(0);
-			circle.translateXProperty().bind(box[y][x].getSphere1().translateXProperty());
-			circle.translateYProperty().bind(box[y][x].getSphere1().translateYProperty());
 			circle.setRadius(10);
 			
 			grid.getChildren().remove(box[y][x].getSphere2());
+			grid.getChildren().remove(box[y][x].getSphere1());
+			box[y][x].setCount(box[y][x].getCount() - 1);
+			zero(x,y,box,grid,sbox,color);
+			
 			
 			PathTransition transitionCircle = new PathTransition();
 			transitionCircle.setPath(circle);
@@ -199,13 +199,15 @@ public class Normal_Grid
 			
 			Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere.rotateProperty(), 360.0)));
             animationTimeLine.setCycleCount(Timeline.INDEFINITE);
-            animationTimeLine.play();                 
+            animationTimeLine.play();  
+            
             GridPane.setHalignment(sphere, HPos.CENTER);
             GridPane.setHalignment(sphere2, HPos.CENTER);
             GridPane.setHalignment(circle, HPos.CENTER);
+            
             grid.add(sphere,x,y);
             grid.add(sphere2,x,y);
-			//grid.add(circle,x,y);
+            
 			box[y][x].setCount();
 			box[y][x].setColor(color);
 			sbox[y][x].setSphereCount();
@@ -355,7 +357,6 @@ public class Normal_Grid
 		}
 		catch(EOFException e)
 		{
-			//System.out.println("added");
 			
 		}
 		input.close();
@@ -428,7 +429,6 @@ public class Normal_Grid
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
         
-        
         grid.setOnMouseClicked(event ->
         {
         	list.remove(0, list.size());
@@ -475,10 +475,6 @@ public class Normal_Grid
         		splitmain(x,y,box,grid,sbox,color);
         		playerturn.increment();
         	}
-        	//for(Node a:list){
-        	//	System.out.println(a.idProperty());
-        	//}
-        	//System.out.println();
         });
 
         btnExit.setOnAction(event->
@@ -499,13 +495,10 @@ public class Normal_Grid
         	try {
 				this.start(sbox, totnum, playerturn);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         });
@@ -515,16 +508,11 @@ public class Normal_Grid
         	Player_Setting p=new Player_Setting();
         	p.run();
         });
+        
         btnUndo.setOnAction(event->
         {
         	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
-        	//for(Node a:grid.getChildren()){
-        	//	System.out.println(a.idProperty());
-        	//}
-        	//System.out.println();
-        	//System.out.println("Hello");
-        	
         	for(int i=0;i<9;i++)
         	{
         		for(int j=0;j<6;j++)
@@ -536,8 +524,8 @@ public class Normal_Grid
         			}
         		}
         	}
+        	playerturn.decrement();
         });
-        
         primaryStage.setScene(scene);
         primaryStage.show();
     }

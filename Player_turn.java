@@ -50,6 +50,32 @@ public class Player_turn implements Serializable{
 		this.players_left = players_left;
 	}
 	
+	public void decrement()
+	{
+		int flag = 0;
+		for(int i=cur_turn-1;i>=0;i--)
+		{
+			if(player[i]==true)
+			{
+				cur_turn = i;
+				flag=1;
+				break;
+			}
+		}
+		if(flag==0)
+		{
+			for(int i=player.length-1;i>cur_turn;i--)
+			{
+				if(player[i]==true)
+				{
+					cur_turn = i;
+					flag=1;
+					break;
+				}
+			}
+		}
+	}
+	
 	public void increment()
 	{
 		int flag=0;
