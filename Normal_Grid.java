@@ -362,11 +362,12 @@ public class Normal_Grid
 		input.close();
 		return obj;
 	}
-	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn)  throws FileNotFoundException, ClassNotFoundException, IOException
+	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
 	{	
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
         
+        menu m = new menu();
         Individual_Setting is = new Individual_Setting();
         Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
@@ -407,24 +408,60 @@ public class Normal_Grid
         HBox hbButtons=new HBox();
         hbButtons.setSpacing(10.0);
         hbButtons.getChildren().addAll(btnUndo,btnSetting,btnNewGame,btnExit);
+        
+        Box box[][] = new Box[9][6];
+        Box prev[][] = new Box[9][6];
+        
         GridPane grid = new GridPane();
+   
         for(int i = 0; i < 6; i++)
-        {
-            ColumnConstraints column = new ColumnConstraints(50);
-            grid.getColumnConstraints().add(column);
-        }
-        for(int i = 0; i < 9; i++) 
-        {
-            RowConstraints row = new RowConstraints(50);
-            grid.getRowConstraints().add(row);
-        }
+       	{
+       		ColumnConstraints column = new ColumnConstraints(50);
+       		grid.getColumnConstraints().add(column);
+       	}
+       	for(int i = 0; i < 9; i++) 
+       	{
+       		RowConstraints row = new RowConstraints(50);
+   	      grid.getRowConstraints().add(row);
+       	}
+        
+       	if(res==1)
+       	{
+        	for(int i=0;i<9;i++)
+        	{
+        		for(int j=0;j<6;j++)
+        		{
+        			if(box[i][j] == null)
+                	{
+                		box[i][j] = new Box();
+                	}
+        			if(sbox[i][j].getSphereCount()>=1)
+        			{
+        				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
+        				Color color = Color.valueOf(sbox[i][j].getColor());
+        				zero(j,i,box,grid,sbox,color);
+        			}
+        			if(sbox[i][j].getSphereCount()>=2)
+        			{
+        				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
+        				Color color = Color.valueOf(sbox[i][j].getColor());
+        				one(j,i,box,grid,sbox,color);
+        			}
+        			if(sbox[i][j].getSphereCount()>=2)
+        			{
+        				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
+        				Color color = Color.valueOf(sbox[i][j].getColor());
+        				two(j,i,box,grid,sbox,color);
+        			}
+        		}
+        	}
+       	}
+        
         final Group root = new Group(grid,hbButtons);
         grid.setStyle("-fx-background-color: black; -fx-grid-lines-visible: true");
         grid.setTranslateX(100);
         grid.setTranslateY(100);
         Scene scene = new Scene(root, 530,600, Color.BLACK);
-        Box box[][] = new Box[9][6];
-        Box prev[][] = new Box[9][6];
         
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
@@ -459,24 +496,60 @@ public class Normal_Grid
         	{
         		zero(x,y,box,grid,sbox,color);
         		playerturn.increment();
+        		try {
+					m.set_playerturns(playerturn);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
         		one(x,y,box,grid,sbox,color); 
         		playerturn.increment();
+        		try {
+					m.set_playerturns(playerturn);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
         		two(x,y,box,grid,sbox,color);  
         		playerturn.increment();
+        		try {
+					m.set_playerturns(playerturn);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         		//currentStatus(sbox);
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
         		splitmain(x,y,box,grid,sbox,color);
         		playerturn.increment();
+        		try {
+					m.set_playerturns(playerturn);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
         		//synchroniseState(box,sbox);
         		//currentStatus(sbox);
         	}
@@ -499,7 +572,7 @@ public class Normal_Grid
         		}
         	}
         	try {
-				this.start(sbox, totnum, playerturn);
+				this.start(sbox, totnum, playerturn,0);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
@@ -535,9 +608,9 @@ public class Normal_Grid
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn) throws FileNotFoundException, ClassNotFoundException, IOException
+	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn,int res) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
-		this.start(sbox,totnum, playerturn);
+		this.start(sbox,totnum, playerturn,res);
 	}
 
 	public void currentStatus(Block_serialize[][] sbox)

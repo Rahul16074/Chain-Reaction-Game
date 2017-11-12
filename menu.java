@@ -144,7 +144,7 @@ public class menu implements javafx.fxml.Initializable{
 					}
 					Player_turn obj=new Player_turn(b);
 					set_playerturns(obj);
-					ex.run(sbox,n,obj);
+					ex.run(sbox,n,obj,0);
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -295,7 +295,7 @@ public class menu implements javafx.fxml.Initializable{
 					e.printStackTrace();
 				}
 				try {
-					ex.run(sbox, n, pl);
+					ex.run(sbox, n, pl,1);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
