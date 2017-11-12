@@ -161,7 +161,63 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
-				ex.run();
+				Block_serialize[][] sbox=new Block_serialize[16][10];
+				for(int i=0;i<16;i++)
+				{
+					for(int j=0;j<10;j++)
+					{
+						sbox[i][j]=new Block_serialize();
+					}
+				}
+				/*try 
+				{
+					storeGridState(sbox);
+				} 
+				catch (FileNotFoundException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+				catch (IOException e1) 
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+				int n;
+				n=Integer.parseInt(sel_player.getValue());
+				String num=sel_player.getValue();
+				try 
+				{
+					setPlayerCount(num);
+				} 
+				catch (IOException f) 
+				{
+					f.printStackTrace();
+				}
+				try 
+				{
+					Boolean[] b=new Boolean[8];
+					Arrays.fill(b, false);
+					for(int i=0;i<n;i++)
+					{
+						b[i]=true;
+					}
+					Player_turn obj=new Player_turn(b);
+					set_playerturns(obj);
+					ex.run(sbox,n,obj);
+				} 
+				catch (FileNotFoundException e1) 
+				{
+					e1.printStackTrace();
+				} 
+				catch (ClassNotFoundException e1) 
+				{
+					e1.printStackTrace();
+				} 
+				catch (IOException e1) 
+				{
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnSetting.setOnAction(new EventHandler<ActionEvent>(){
