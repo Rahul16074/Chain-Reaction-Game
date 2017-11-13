@@ -198,6 +198,14 @@ public class Player_turn implements Serializable{
 		}
 			
 	}
+	
+	public void check_increment()
+	{
+		if(player[cur_turn]==false)
+		{
+			increment();
+		}
+	}
 	public void isWinner()
 	{
 		int flag=0;

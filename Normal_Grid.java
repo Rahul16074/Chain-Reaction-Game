@@ -308,6 +308,7 @@ public class Normal_Grid
         	}
         	playerturn.updatePlayer(sbox, 9, 6);
     		playerturn.isWinner();
+    		playerturn.check_increment();
 		});
         
 	}
