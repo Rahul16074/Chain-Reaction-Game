@@ -68,7 +68,7 @@ public class Normal_Grid
 		GridPane.setHalignment(sphere, HPos.CENTER);
 		box[y][x].setCount();
 		box[y][x].setColor(color);
-		sbox[y][x].setSphereCount(box[y][x].getCount());
+		sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 		sbox[y][x].setColor(color.toString());
 		try 
 		{
@@ -97,6 +97,7 @@ public class Normal_Grid
             
             grid.getChildren().remove(box[y][x].getSphere1());
             box[y][x].setCount(box[y][x].getCount() - 1);
+            sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
             zero(x,y,box,grid,sbox,color);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
@@ -130,7 +131,7 @@ public class Normal_Grid
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount(box[y][x].getCount());
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -176,6 +177,7 @@ public class Normal_Grid
 			grid.getChildren().remove(box[y][x].getSphere2());
 			grid.getChildren().remove(box[y][x].getSphere1());
 			box[y][x].setCount(box[y][x].getCount() - 1);
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
 			zero(x,y,box,grid,sbox,color);
 			
 			
@@ -210,7 +212,7 @@ public class Normal_Grid
             
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount(box[y][x].getCount());
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -447,7 +449,7 @@ public class Normal_Grid
         				Color color = Color.valueOf(sbox[i][j].getColor());
         				one(j,i,box,grid,sbox,color);
         			}
-        			if(sbox[i][j].getSphereCount()>=2)
+        			if(sbox[i][j].getSphereCount()>=3)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
