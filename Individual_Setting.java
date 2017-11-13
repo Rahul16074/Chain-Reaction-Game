@@ -130,7 +130,7 @@ public class Individual_Setting{
 		}
 		input.close();
 	}
-	public serializedSetting read(String location) throws FileNotFoundException, IOException, ClassNotFoundException
+	static serializedSetting read(String location) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream input=null;
 		serializedSetting obj=null;

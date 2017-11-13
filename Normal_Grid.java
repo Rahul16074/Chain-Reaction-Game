@@ -85,7 +85,7 @@ public class Normal_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
@@ -149,11 +149,11 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid, sbox, color);
+			splitmain(x,y,box,grid, sbox, color, playerturn);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
@@ -231,10 +231,10 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid,sbox,color);
+			splitmain(x,y,box,grid,sbox,color,playerturn);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -296,39 +296,39 @@ public class Normal_Grid
         	}
         	else if(box[y2][x2].getCount() == 1)
         	{       
-        		one(x2,y2,box,grid,sbox,color);       		
+        		one(x2,y2,box,grid,sbox,color,playerturn);       		
         	}
         	else if(box[y2][x2].getCount() == 2)
             {        	
-        		two(x2,y2,box,grid,sbox,color);      		
+        		two(x2,y2,box,grid,sbox,color,playerturn);      		
             }
         	else if(box[y2][x2].getCount() == 3)
         	{
-        		splitmain(x2,y2,box,grid,sbox,color);
+        		splitmain(x2,y2,box,grid,sbox,color,playerturn);
         	}
- 		   
+        	playerturn.updatePlayer(sbox, 9, 6);
+    		playerturn.isWinner();
 		});
-        
         
 	}
 	
-	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color)
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn)
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color);
+			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn);
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color);
+			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn);
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color);
+			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn);
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color);
+			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn);
 		}
 	}
 	
@@ -447,13 +447,13 @@ public class Normal_Grid
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				one(j,i,box,grid,sbox,color);
+        				one(j,i,box,grid,sbox,color,playerturn);
         			}
         			if(sbox[i][j].getSphereCount()>=3)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				two(j,i,box,grid,sbox,color);
+        				two(j,i,box,grid,sbox,color,playerturn);
         			}
         		}
         	}
@@ -511,7 +511,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
-        		one(x,y,box,grid,sbox,color); 
+        		one(x,y,box,grid,sbox,color,playerturn); 
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -526,7 +526,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
-        		two(x,y,box,grid,sbox,color);  
+        		two(x,y,box,grid,sbox,color,playerturn);  
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -541,7 +541,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
-        		splitmain(x,y,box,grid,sbox,color);
+        		splitmain(x,y,box,grid,sbox,color,playerturn);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
