@@ -78,6 +78,7 @@ public class menu implements javafx.fxml.Initializable{
 		{
 			e1.printStackTrace();
 		}
+		
 		btnPlay.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
@@ -234,6 +235,7 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
+				
 				int n=0;
 				Normal_Grid ex=new Normal_Grid();
 				try 
@@ -294,18 +296,36 @@ public class menu implements javafx.fxml.Initializable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				try {
-					ex.run(sbox, n, pl,1);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				
+				int flag=0;
+				for(int i=0;i<sbox[0].length;i++)
+				{
+					for(int j=0;j<sbox.length;j++)
+					{
+						if(!sbox[j][i].isEmpty())
+						{
+							flag=1;
+							break;
+						}
+					}
 				}
+				if(flag==1)
+				{
+					try {
+						ex.run(sbox, n, pl,1);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+								
 			}
 			
 		});
@@ -433,7 +453,7 @@ public class menu implements javafx.fxml.Initializable{
 		out.close();
 	}
 	
-	public Player_turn get_playerturns() throws FileNotFoundException, IOException, ClassNotFoundException
+	static Player_turn get_playerturns() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();

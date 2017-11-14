@@ -19,23 +19,33 @@ import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Sphere;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.collections.FXCollections;
@@ -44,7 +54,33 @@ import javafx.collections.ObservableList;
 
 public class Normal_Grid
 {
-	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color)
+	public class cond{
+		private int count;
+		private String winner;
+		public cond()
+		{
+			count=0;
+			winner=null;
+		}
+		public void add()
+		{
+			count+=1;
+		}
+		public int getCount()
+		{
+			return count;
+		}
+		public void setWinner(String text)
+		{
+			winner=text;
+		}
+		public String getWinner()
+		{
+			return winner;
+		}
+	}
+	cond flag_obj=new cond();
+	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2)
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
@@ -85,7 +121,7 @@ public class Normal_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
@@ -98,7 +134,7 @@ public class Normal_Grid
             grid.getChildren().remove(box[y][x].getSphere1());
             box[y][x].setCount(box[y][x].getCount() - 1);
             sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-            zero(x,y,box,grid,sbox,color);
+            zero(x,y,box,grid,sbox,color,btn,btn2);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
@@ -149,11 +185,11 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid, sbox, color, playerturn);
+			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
@@ -178,7 +214,7 @@ public class Normal_Grid
 			grid.getChildren().remove(box[y][x].getSphere1());
 			box[y][x].setCount(box[y][x].getCount() - 1);
 			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-			zero(x,y,box,grid,sbox,color);
+			zero(x,y,box,grid,sbox,color,btn,btn2);
 			
 			
 			PathTransition transitionCircle = new PathTransition();
@@ -231,10 +267,10 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid,sbox,color,playerturn);
+			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -292,44 +328,137 @@ public class Normal_Grid
         	
         	if(box[y2][x2].getCount() == 0)
         	{
-        		zero(x2,y2,box,grid,sbox,color);
+        		zero(x2,y2,box,grid,sbox,color,btn,btn2);
         	}
         	else if(box[y2][x2].getCount() == 1)
         	{       
-        		one(x2,y2,box,grid,sbox,color,playerturn);       		
+        		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);       		
         	}
         	else if(box[y2][x2].getCount() == 2)
             {        	
-        		two(x2,y2,box,grid,sbox,color,playerturn);      		
+        		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);      		
             }
         	else if(box[y2][x2].getCount() == 3)
         	{
-        		splitmain(x2,y2,box,grid,sbox,color,playerturn);
+        		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);
         	}
         	playerturn.updatePlayer(sbox, 9, 6);
-    		playerturn.isWinner();
+    		playerturn.isWinner(flag_obj);
+    		if(flag_obj.getCount()==1)
+    		{
+    			//System.out.println("hey");
+    			String w=flag_obj.getWinner();
+    			w=w.substring(0, 1);
+    			popup(Integer.parseInt(w),btn,btn2,sbox);
+    			
+    			/*Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Information Dialog");
+    			alert.setHeaderText("Look, an Information Dialog");
+    			alert.setContentText(flag_obj.getWinner());
+    			alert.show();*/
+    		}
     		playerturn.check_increment();
 		});
         
 	}
 	
-	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn)
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox) {
+        final Stage dialog = new Stage();
+        dialog.setTitle("Game Over");
+        Button new_game = new Button("New Game");
+        Button exit = new Button("Exit");
+
+        Label displayLabel = new Label("Player "+winner+" is the winner");
+        displayLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
+
+        dialog.initModality(Modality.NONE);
+       // dialog.initOwner((Stage) tableview.getScene().getWindow());
+
+        HBox dialogHbox = new HBox(20);
+        dialogHbox.setAlignment(Pos.CENTER);
+
+        VBox dialogVbox1 = new VBox(20);
+        dialogVbox1.setAlignment(Pos.CENTER_LEFT);
+
+        VBox dialogVbox2 = new VBox(20);
+        dialogVbox2.setAlignment(Pos.CENTER_RIGHT);
+
+        dialogHbox.getChildren().add(displayLabel);
+        dialogVbox1.getChildren().add(new_game);
+        dialogVbox2.getChildren().add(exit);
+
+        new_game.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                    	btn.fire();
+                    	for(int i=0;i<9;i++)
+                    	{
+                    		for(int j=0;j<6;j++)
+                    		{
+                    			sbox[i][j].reset();
+                    		}
+                    	}
+                    	try {
+							store_state(sbox);
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                        dialog.close();
+                    }
+                });
+        exit.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                    	btn2.fire();
+                    	for(int i=0;i<9;i++)
+                    	{
+                    		for(int j=0;j<6;j++)
+                    		{
+                    			sbox[i][j].reset();
+                    		}
+                    	}
+                    	try {
+							store_state(sbox);
+						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                        dialog.close();
+                    }
+                });
+
+        dialogHbox.getChildren().addAll(dialogVbox1, dialogVbox2);
+        Scene dialogScene = new Scene(dialogHbox, 500, 40);
+        //dialogScene.getStylesheets().add("//style sheet of your choice");
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2)
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn);
+			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2);
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn);
+			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2);
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn);
+			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2);
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn);
+			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2);
 		}
 	}
 	
@@ -366,7 +495,7 @@ public class Normal_Grid
 		return obj;
 	}
 	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
-	{	
+	{
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
         
@@ -379,7 +508,7 @@ public class Normal_Grid
 		File[] listOfFiles = folder.listFiles();
 		location=location+"\\savedSettings.txt";
 		is.load(location);
-		serializedSetting obj=is.read(location);
+		serializedSetting obj=Individual_Setting.read(location);
 		String[] pcolor = new String[8];
 		pcolor[0] = obj.color1;
 		pcolor[1] = obj.color2;
@@ -442,19 +571,19 @@ public class Normal_Grid
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				zero(j,i,box,grid,sbox,color);
+        				zero(j,i,box,grid,sbox,color, btnNewGame, btnExit);
         			}
         			if(sbox[i][j].getSphereCount()>=2)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				one(j,i,box,grid,sbox,color,playerturn);
+        				one(j,i,box,grid,sbox,color,playerturn,btnNewGame, btnExit);
         			}
         			if(sbox[i][j].getSphereCount()>=3)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				two(j,i,box,grid,sbox,color,playerturn);
+        				two(j,i,box,grid,sbox,color,playerturn,btnNewGame,btnExit);
         			}
         		}
         	}
@@ -497,7 +626,7 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
-        		zero(x,y,box,grid,sbox,color);
+        		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -512,7 +641,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
-        		one(x,y,box,grid,sbox,color,playerturn); 
+        		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit); 
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -527,7 +656,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
-        		two(x,y,box,grid,sbox,color,playerturn);  
+        		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit);  
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -542,7 +671,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
-        		splitmain(x,y,box,grid,sbox,color,playerturn);
+        		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -575,6 +704,7 @@ public class Normal_Grid
         		}
         	}
         	try {
+        		playerturn.reset(totnum);
 				this.start(sbox, totnum, playerturn,0);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

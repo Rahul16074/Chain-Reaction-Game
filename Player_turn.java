@@ -206,7 +206,17 @@ public class Player_turn implements Serializable{
 			increment();
 		}
 	}
-	public void isWinner()
+	
+	public void reset(int num)
+	{
+		Arrays.fill(player, false);
+		for(int i=0;i<num;i++)
+		{
+			player[i]=true;
+		}
+	}
+	
+	public Normal_Grid.cond isWinner(Normal_Grid.cond obj)
 	{
 		int flag=0;
 		int index=0;
@@ -221,7 +231,10 @@ public class Player_turn implements Serializable{
 		}
 		if(flag==1)
 		{
-			System.out.println(index+1+" is the winner");
+			obj.setWinner(index+1+" is the winner");
+			obj.add();
+			//System.out.println(index+1+" is the winner");
 		}
+		return obj;
 	}
 }
