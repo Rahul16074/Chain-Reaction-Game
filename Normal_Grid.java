@@ -78,9 +78,14 @@ public class Normal_Grid
 		{
 			return winner;
 		}
+		public void reset()
+		{
+			count=0;
+			winner=null;
+		}
 	}
 	cond flag_obj=new cond();
-	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2)
+	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2, Button undo, Button setting)
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
@@ -121,7 +126,7 @@ public class Normal_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
@@ -134,7 +139,7 @@ public class Normal_Grid
             grid.getChildren().remove(box[y][x].getSphere1());
             box[y][x].setCount(box[y][x].getCount() - 1);
             sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-            zero(x,y,box,grid,sbox,color,btn,btn2);
+            zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
@@ -185,11 +190,11 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2);
+			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2,undo, setting);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
@@ -214,7 +219,7 @@ public class Normal_Grid
 			grid.getChildren().remove(box[y][x].getSphere1());
 			box[y][x].setCount(box[y][x].getCount() - 1);
 			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-			zero(x,y,box,grid,sbox,color,btn,btn2);
+			zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
 			
 			
 			PathTransition transitionCircle = new PathTransition();
@@ -267,10 +272,10 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2);
+			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -320,6 +325,7 @@ public class Normal_Grid
         transitionCircle.setOnFinished((ActionEvent event) -> {
         	
         	grid.getChildren().remove(sphere1);
+        	//grid.setDisable(true);
         	
         	if(box[y2][x2] == null)
         	{
@@ -328,19 +334,19 @@ public class Normal_Grid
         	
         	if(box[y2][x2].getCount() == 0)
         	{
-        		zero(x2,y2,box,grid,sbox,color,btn,btn2);
+        		zero(x2,y2,box,grid,sbox,color,btn,btn2,undo, setting);
         	}
         	else if(box[y2][x2].getCount() == 1)
         	{       
-        		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);       		
+        		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);       		
         	}
         	else if(box[y2][x2].getCount() == 2)
             {        	
-        		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);      		
+        		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);      		
             }
         	else if(box[y2][x2].getCount() == 3)
         	{
-        		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2);
+        		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
         	}
         	playerturn.updatePlayer(sbox, 9, 6);
     		playerturn.isWinner(flag_obj);
@@ -349,7 +355,7 @@ public class Normal_Grid
     			//System.out.println("hey");
     			String w=flag_obj.getWinner();
     			w=w.substring(0, 1);
-    			popup(Integer.parseInt(w),btn,btn2,sbox);
+    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid);
     			
     			/*Alert alert = new Alert(AlertType.INFORMATION);
     			alert.setTitle("Information Dialog");
@@ -358,12 +364,16 @@ public class Normal_Grid
     			alert.show();*/
     		}
     		playerturn.check_increment();
+    		//grid.setDisable(false);
 		});
         
 	}
 	
-	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox) {
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid) {
         final Stage dialog = new Stage();
+        undo.setDisable(true);
+        setting.setDisable(true);
+        grid.setDisable(true);
         dialog.setTitle("Game Over");
         Button new_game = new Button("New Game");
         Button exit = new Button("Exit");
@@ -386,11 +396,14 @@ public class Normal_Grid
         dialogHbox.getChildren().add(displayLabel);
         dialogVbox1.getChildren().add(new_game);
         dialogVbox2.getChildren().add(exit);
+        btn.setDisable(true);
+        btn2.setDisable(true);
 
         new_game.addEventHandler(MouseEvent.MOUSE_CLICKED,
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
+                    	btn.setDisable(false);
                     	btn.fire();
                     	for(int i=0;i<9;i++)
                     	{
@@ -415,6 +428,7 @@ public class Normal_Grid
                 new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent e) {
+                    	btn2.setDisable(false);
                     	btn2.fire();
                     	for(int i=0;i<9;i++)
                     	{
@@ -442,23 +456,23 @@ public class Normal_Grid
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2)
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2);
+			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2);
+			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2);
+			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2);
+			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 	}
 	
@@ -505,7 +519,7 @@ public class Normal_Grid
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String location=s+"\\src\\application";
 		File folder = new File(location);
-		File[] listOfFiles = folder.listFiles();
+		//File[] listOfFiles = folder.listFiles();
 		location=location+"\\savedSettings.txt";
 		is.load(location);
 		serializedSetting obj=Individual_Setting.read(location);
@@ -571,19 +585,19 @@ public class Normal_Grid
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				zero(j,i,box,grid,sbox,color, btnNewGame, btnExit);
+        				zero(j,i,box,grid,sbox,color, btnNewGame, btnExit, btnUndo, btnSetting);
         			}
         			if(sbox[i][j].getSphereCount()>=2)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				one(j,i,box,grid,sbox,color,playerturn,btnNewGame, btnExit);
+        				one(j,i,box,grid,sbox,color,playerturn,btnNewGame, btnExit, btnUndo, btnSetting);
         			}
         			if(sbox[i][j].getSphereCount()>=3)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				two(j,i,box,grid,sbox,color,playerturn,btnNewGame,btnExit);
+        				two(j,i,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);
         			}
         		}
         	}
@@ -626,7 +640,7 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
-        		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit);
+        		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo,btnSetting);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -641,7 +655,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
-        		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit); 
+        		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo,btnSetting); 
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -656,7 +670,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
-        		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit);  
+        		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);  
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -671,7 +685,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
-        		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit);
+        		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -705,6 +719,8 @@ public class Normal_Grid
         	}
         	try {
         		playerturn.reset(totnum);
+        		playerturn.setCur_turn(0);
+        		flag_obj.reset();
 				this.start(sbox, totnum, playerturn,0);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -755,21 +771,6 @@ public class Normal_Grid
 				System.out.print(sbox[i][j].getColor()+" "+sbox[i][j].getSphereCount()+" ");
 			}
 			System.out.println();
-		}
-	}
-	
-	public void synchroniseState(Box[][] box, Block_serialize[][] sbox)
-	{
-		for(int i=0;i<9;i++)
-		{
-			for(int j=0;j<6;j++)
-			{
-				if(box[i][j]!=null && box[i][j].getColor()!=null)
-				{
-					System.out.println("At:"+i+" "+j);
-					sbox[i][j].setColor(box[i][j].getColor().toString());
-				}
-			}
 		}
 	}
 	public static void main(String[] args) 
