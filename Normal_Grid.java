@@ -36,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -364,7 +365,64 @@ public class Normal_Grid
         	{
         		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
         	}
+        	Individual_Setting is = new Individual_Setting();
+            Path currentRelativePath = Paths.get("");
+     		String s = currentRelativePath.toAbsolutePath().toString();
+     		String location=s+"\\src\\application";
+     		File folder = new File(location);
+     		//File[] listOfFiles = folder.listFiles();
+     		location=location+"\\savedSettings.txt";
+     		
+     		try {
+				is.load(location);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+     		serializedSetting obj = null;
+			try {
+				obj = Individual_Setting.read(location);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     		String[] pcolor = new String[8];
+     		pcolor[0] = obj.color1;
+     		pcolor[1] = obj.color2;
+     		pcolor[2] = obj.color3;
+     		pcolor[3] = obj.color4;
+     		pcolor[4] = obj.color5;
+     		pcolor[5] = obj.color6;
+     		pcolor[6] = obj.color7;
+     		pcolor[7] = obj.color8;
+     		
         	playerturn.updatePlayer(sbox, 9, 6);
+        	String col = pcolor[playerturn.getCur_turn()];
+        	int tmp = 0;
+        	for(Node a: grid.getChildren())
+           	{
+            	if(tmp<55)
+            	{
+            		a.setStyle("-fx-border-color: "+col);
+            		tmp++;
+            	}
+            	else
+            	{
+            		break;
+            	}
+           	}
     		playerturn.isWinner(flag_obj);
     		if(flag_obj.getCount()==1)
     		{
@@ -590,6 +648,14 @@ public class Normal_Grid
        		RowConstraints row = new RowConstraints(50);
        		grid.getRowConstraints().add(row);
        	}
+
+       	for(int i=0;i<9;i++)
+       	{
+       		for(int j=0;j<6;j++)
+       		{
+       			grid.add(new Pane(), j, i);
+       		}
+       	}
         
        	if(res==1)
        	{
@@ -631,6 +697,21 @@ public class Normal_Grid
         
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
+
+        String co = pcolor[playerturn.getCur_turn()];
+        int temp = 0;
+        for(Node a: grid.getChildren())
+       	{
+        	if(temp<55)
+        	{
+        		a.setStyle("-fx-border-color: "+co);
+        		temp++;
+        	}
+        	else
+        	{
+        		break;
+        	}
+       	}
         
         grid.setOnMouseClicked(event ->
         {
@@ -677,6 +758,20 @@ public class Normal_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				String c = pcolor[playerturn.getCur_turn()];
+            	int tmp = 0;
+            	for(Node a: grid.getChildren())
+               	{
+                	if(tmp<55)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
@@ -692,6 +787,20 @@ public class Normal_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				String c = pcolor[playerturn.getCur_turn()];
+            	int tmp = 0;
+            	for(Node a: grid.getChildren())
+               	{
+                	if(tmp<55)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
@@ -707,6 +816,20 @@ public class Normal_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+        		String c = pcolor[playerturn.getCur_turn()];
+        		int tmp = 0;
+				for(Node a: grid.getChildren())
+               	{
+                	if(tmp<55)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
@@ -799,6 +922,20 @@ public class Normal_Grid
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			String c = pcolor[playerturn.getCur_turn()];
+        	int tmp = 0;
+        	for(Node a: grid.getChildren())
+           	{
+            	if(tmp<55)
+            	{
+            		a.setStyle("-fx-border-color: "+c);
+            		tmp++;
+            	}
+            	else
+            	{
+            		break;
+            	}
+           	}
         });
         primaryStage.setScene(scene);
         primaryStage.show();
