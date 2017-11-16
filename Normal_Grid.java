@@ -281,7 +281,7 @@ public class Normal_Grid
 			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting, int val)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -370,6 +370,8 @@ public class Normal_Grid
         	{
         		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
         	}
+        	//currentStatus(sbox);
+        	//System.out.println();
         	Individual_Setting is = new Individual_Setting();
             Path currentRelativePath = Paths.get("");
      		String s = currentRelativePath.toAbsolutePath().toString();
@@ -412,8 +414,8 @@ public class Normal_Grid
      		pcolor[5] = obj.color6;
      		pcolor[6] = obj.color7;
      		pcolor[7] = obj.color8;
-     		
-        	playerturn.updatePlayer(sbox, 9, 6);
+     		if(val==1)
+        	{playerturn.updatePlayer(sbox, 9, 6);
         	String col = pcolor[playerturn.getCur_turn()];
         	int tmp = 0;
         	for(Node a: grid.getChildren())
@@ -443,6 +445,7 @@ public class Normal_Grid
     			alert.show();*/
     		}
     		playerturn.check_increment();
+        	}
     		//grid.setDisable(false);
 		});
         
@@ -540,19 +543,19 @@ public class Normal_Grid
 	{
 		if(x+1<=5)
 		{
-			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
+			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
 		}
 		if(x-1>=0)
 		{
-			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
+			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
 		}
 		if(y+1<=8)
 		{
-			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
+			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
 		}
 		if(y-1>=0)
 		{
-			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
+			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
 		}
 	}
 	
@@ -594,6 +597,10 @@ public class Normal_Grid
         primaryStage.setTitle("Game");
                
         menu m = new menu();
+        if(res==0)
+        {
+        	m.combineSettings();
+        }
         Individual_Setting is = new Individual_Setting();
         Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();

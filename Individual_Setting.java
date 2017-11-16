@@ -68,7 +68,7 @@ public class Individual_Setting{
 		String location=s+"\\src\\application";
 		File folder = new File(location);
 		File[] listOfFiles = folder.listFiles();
-		location=location+"\\savedSettings.txt";
+		location=location+"\\tempSetting.txt";
 		load(location);
 		String color="";
 		serializedSetting obj=read(location);
@@ -106,7 +106,7 @@ public class Individual_Setting{
 		}
 		this.start(color, num);
 	}
-	public void add(String location, serializedSetting obj) throws FileNotFoundException, IOException
+	static void add(String location, serializedSetting obj) throws FileNotFoundException, IOException
 	{
 		ObjectOutputStream out=null;
 		out=new ObjectOutputStream(new FileOutputStream(location));
@@ -154,42 +154,281 @@ public class Individual_Setting{
 		String location=s+"\\src\\application";
 		File folder = new File(location);
 		File[] listOfFiles = folder.listFiles();
-		location=location+"\\savedSettings.txt";
+		location=location+"\\tempSetting.txt";
 		try 
 		{
 			serializedSetting obj=read(location);
 			if(num==1)
 			{
+
+				String replace=obj.getColor1();
 				obj.setColor1(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 				//System.out.println("at one");
 			}
 			else if(num==2)
 			{
+
+				String replace=obj.getColor2();
 				obj.setColor2(color);
+				if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==3)
 			{
+
+				String replace=obj.getColor3();
 				obj.setColor3(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==4)
 			{
+				String replace=obj.getColor4();
 				obj.setColor4(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==5)
 			{
+
+				String replace=obj.getColor5();
 				obj.setColor5(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==6)
 			{
+
+				String replace=obj.getColor6();
 				obj.setColor6(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==7)
 			{
+
+				String replace=obj.getColor7();
 				obj.setColor7(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
+				else if(obj.getColor8().equals(color))
+				{
+					obj.setColor8(replace);
+				}
 			}
 			else if(num==8)
 			{
+
+				String replace=obj.getColor8();
 				obj.setColor8(color);
+				if(obj.getColor2().equals(color))
+				{
+					obj.setColor2(replace);
+				}
+				else if(obj.getColor3().equals(color))
+				{
+					obj.setColor3(replace);
+				}
+				else if(obj.getColor4().equals(color))
+				{
+					obj.setColor4(replace);
+				}
+				else if(obj.getColor5().equals(color))
+				{
+					obj.setColor5(replace);
+				}
+				else if(obj.getColor6().equals(color))
+				{
+					obj.setColor6(replace);
+				}
+				else if(obj.getColor7().equals(color))
+				{
+					obj.setColor7(replace);
+				}
+				else if(obj.getColor1().equals(color))
+				{
+					obj.setColor1(replace);
+				}
 			}
 			//System.out.println("changed");
 			add(location,obj);

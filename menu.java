@@ -82,6 +82,7 @@ public class menu implements javafx.fxml.Initializable{
 		btnPlay.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
+				combineSettings();
 				Normal_Grid ex=new Normal_Grid();
 				Block_serialize[][] sbox=new Block_serialize[9][6];
 				for(int i=0;i<9;i++)
@@ -162,6 +163,7 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
+				combineSettings();
 				Block_serialize[][] sbox=new Block_serialize[15][10];
 				for(int i=0;i<15;i++)
 				{
@@ -299,13 +301,14 @@ public class menu implements javafx.fxml.Initializable{
 				
 				if(sbox.length==15)
 				{
+					//System.out.println("hey");
 					HD_Grid ex=new HD_Grid();
 					int flag=0;
 					for(int i=0;i<sbox[0].length;i++)
 					{
 						for(int j=0;j<sbox.length;j++)
 						{
-							if(sbox[j][i]==null && sbox[j][i].isEmpty()==false)
+							if(sbox[j][i]!=null && sbox[j][i].isEmpty()==false)
 							{
 								flag=1;
 								break;
@@ -507,6 +510,37 @@ public class menu implements javafx.fxml.Initializable{
 		}
 		input.close();
 		return obj;
+	}
+	
+	
+	public void combineSettings()
+	{
+		 	Path currentRelativePath = Paths.get("");
+			String s = currentRelativePath.toAbsolutePath().toString();
+			String location1=s+"\\src\\application";
+			//File folder = new File(location1);
+			//File[] listOfFiles = folder.listFiles();
+			location1=location1+"\\savedSettings.txt";
+			
+			currentRelativePath = Paths.get("");
+			s = currentRelativePath.toAbsolutePath().toString();
+			String location2=s+"\\src\\application";
+			//File folder = new File(location);
+				//File[] listOfFiles = folder.listFiles();
+			location2=location2+"\\tempSetting.txt";
+			
+			try {
+				Individual_Setting.add(location1,Individual_Setting.read(location2));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	

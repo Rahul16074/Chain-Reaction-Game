@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -25,6 +26,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Lighting;
@@ -33,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -100,14 +104,14 @@ public class HD_Grid
 		}
 		else
 		{
-			Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere.rotateProperty(), 360.0)));
+			Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(9), new KeyValue(sphere.rotateProperty(), 360.0)));
             animationTimeLine.setCycleCount(Timeline.INDEFINITE);
             animationTimeLine.play();
 		}
 		GridPane.setHalignment(sphere, HPos.CENTER);
 		box[y][x].setCount();
 		box[y][x].setColor(color);
-		sbox[y][x].setSphereCount(box[y][x].getCount());
+		sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 		sbox[y][x].setColor(color.toString());
 		try 
 		{
@@ -126,7 +130,7 @@ public class HD_Grid
 	
 	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
 	{
-		if((x!=0 || y!=0) &&  (x!=0 || y!=14) && (x!=9 || y!=0) && (x!=9 || y!=14))
+		if((x!=0 || y!=0) &&  (x!=0 || y!=14) && (x!=9 || y!=0) && (x!=9 || y!=14) )
 		{
 			Sphere sphere = new Sphere(7);
         	PhongMaterial material = new PhongMaterial();
@@ -136,6 +140,11 @@ public class HD_Grid
             
             grid.getChildren().remove(box[y][x].getSphere1());
             box[y][x].setCount(box[y][x].getCount() - 1);
+            if(sbox[y][x]==null)
+            {
+            	return;
+            }
+            sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
             zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
@@ -169,7 +178,7 @@ public class HD_Grid
 			//grid.add(circle,x,y);
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount(box[y][x].getCount());
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -215,6 +224,7 @@ public class HD_Grid
 			grid.getChildren().remove(box[y][x].getSphere2());
 			grid.getChildren().remove(box[y][x].getSphere1());
 			box[y][x].setCount(box[y][x].getCount() - 1);
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
 			zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
 			
 			
@@ -249,7 +259,7 @@ public class HD_Grid
             
 			box[y][x].setCount();
 			box[y][x].setColor(color);
-			sbox[y][x].setSphereCount(box[y][x].getCount()+1);
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()+1);
 			sbox[y][x].setColor(color.toString());
 			try 
 			{
@@ -271,13 +281,13 @@ public class HD_Grid
 			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting, int val)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
 		grid.getChildren().remove(box[y1][x1].getSphere3());
 		box[y1][x1].setempty();
-		sbox[y1][x1].setEmpty();
+		if(sbox[y1][x1]!=null){sbox[y1][x1].setEmpty();}
 		try 
 		{
 			store_state(sbox);
@@ -308,6 +318,21 @@ public class HD_Grid
 		transitionCircle.setDuration(Duration.seconds(0.3));
 		transitionCircle.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		transitionCircle.setCycleCount(1);
+		transitionCircle.statusProperty().addListener(
+        		(o,olds,news) -> {
+        			if(news==Animation.Status.RUNNING)
+        			{
+        				grid.setDisable(true);
+        			}
+        			if(news==Animation.Status.STOPPED)
+        			{
+        				grid.setDisable(false);
+        			}
+        			
+        		}
+        		);
+				
+        
 		transitionCircle.play();		
 		
 		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
@@ -318,39 +343,99 @@ public class HD_Grid
         grid.add(sphere1,x1,y1);
         //grid.add(line,x1,y1);
         
+        
         transitionCircle.setOnFinished((ActionEvent event) -> {
         	
         	grid.getChildren().remove(sphere1);
+        	//grid.setDisable(true);
         	
         	if(box[y2][x2] == null)
         	{
         		box[y2][x2] = new Box();
         	}
         	
-        	if(box[y2][x2].getCount() == 0)
+        	if(box[y2][x2].getCount() == 0 && sbox[y2][x2]!=null)
         	{
         		zero(x2,y2,box,grid,sbox,color,btn,btn2,undo, setting);
         	}
-        	else if(box[y2][x2].getCount() == 1)
+        	else if(box[y2][x2].getCount() == 1 && sbox[y2][x2]!=null)
         	{       
         		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);       		
         	}
-        	else if(box[y2][x2].getCount() == 2)
+        	else if(box[y2][x2].getCount() == 2 && sbox[y2][x2]!=null)
             {        	
         		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);      		
             }
-        	else if(box[y2][x2].getCount() == 3)
+        	else if(box[y2][x2].getCount() == 3 && sbox[y2][x2]!=null)
         	{
         		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
         	}
-        	playerturn.updatePlayer(sbox, 15, 10);
+        	Individual_Setting is = new Individual_Setting();
+            Path currentRelativePath = Paths.get("");
+     		String s = currentRelativePath.toAbsolutePath().toString();
+     		String location=s+"\\src\\application";
+     		File folder = new File(location);
+     		//File[] listOfFiles = folder.listFiles();
+     		location=location+"\\savedSettings.txt";
+     		
+     		try {
+				is.load(location);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+     		serializedSetting obj = null;
+			try {
+				obj = Individual_Setting.read(location);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     		String[] pcolor = new String[8];
+     		pcolor[0] = obj.color1;
+     		pcolor[1] = obj.color2;
+     		pcolor[2] = obj.color3;
+     		pcolor[3] = obj.color4;
+     		pcolor[4] = obj.color5;
+     		pcolor[5] = obj.color6;
+     		pcolor[6] = obj.color7;
+     		pcolor[7] = obj.color8;
+     		
+     		if(val==1)
+        	{playerturn.updatePlayer(sbox, 9, 6);
+        	String col = pcolor[playerturn.getCur_turn()];
+        	int tmp = 0;
+        	for(Node a: grid.getChildren())
+           	{
+            	if(tmp<55)
+            	{
+            		a.setStyle("-fx-border-color: "+col);
+            		tmp++;
+            	}
+            	else
+            	{
+            		break;
+            	}
+           	}
     		playerturn.isWinnerHD(flag_obj);
     		if(flag_obj.getCount()==1)
     		{
     			//System.out.println("hey");
     			String w=flag_obj.getWinner();
     			w=w.substring(0, 1);
-    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid);
+    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid,transitionCircle);
     			
     			/*Alert alert = new Alert(AlertType.INFORMATION);
     			alert.setTitle("Information Dialog");
@@ -359,13 +444,13 @@ public class HD_Grid
     			alert.show();*/
     		}
     		playerturn.check_increment();
+        	}
     		//grid.setDisable(false);
 		});
         
-        
 	}
 	
-	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid) {
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid, PathTransition transitionCircle) {
         final Stage dialog = new Stage();
         undo.setDisable(true);
         setting.setDisable(true);
@@ -431,6 +516,7 @@ public class HD_Grid
                     		for(int j=0;j<10;j++)
                     		{
                     			sbox[i][j].reset();
+                    			sbox[i][j]=null;
                     		}
                     	}
                     	try {
@@ -452,24 +538,23 @@ public class HD_Grid
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	
 	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
 	{
 		if(x+1<=9)
 		{
-			split(x,y,x+1,y,0,0,35,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,35,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-35,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-35,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
 		}
 		if(y+1<=14)
 		{
-			split(x,y,x,y+1,0,0,0,35,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,35,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-35,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-35,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
 		}
 	}
 	
@@ -485,9 +570,28 @@ public class HD_Grid
 		out.close();
 	}
 	
-	
+	static Block_serialize[][] get_state() throws FileNotFoundException, IOException, ClassNotFoundException
+	{
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		String location=s+"\\src\\application";
+		location=location+"\\Block_state.txt";
+		ObjectInputStream input=null;
+		Block_serialize[][] obj=null;
+		try
+		{
+			input=new ObjectInputStream(new FileInputStream(location));
+			obj= (Block_serialize[][])input.readObject();	
+		}
+		catch(EOFException e)
+		{
+			
+		}
+		input.close();
+		return obj;
+	}
 	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
-	{	
+	{
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
                
@@ -552,6 +656,14 @@ public class HD_Grid
        		RowConstraints row = new RowConstraints(35);
        		grid.getRowConstraints().add(row);
        	}
+
+       	for(int i=0;i<15;i++)
+       	{
+       		for(int j=0;j<10;j++)
+       		{
+       			grid.add(new Pane(), j, i);
+       		}
+       	}
         
        	if(res==1)
        	{
@@ -593,6 +705,21 @@ public class HD_Grid
         
         ObservableList<Node> list = FXCollections.observableArrayList();
         list.addAll(grid.getChildren());
+
+        String co = pcolor[playerturn.getCur_turn()];
+        int temp = 0;
+        for(Node a: grid.getChildren())
+       	{
+        	if(temp<151)
+        	{
+        		a.setStyle("-fx-border-color: "+co);
+        		temp++;
+        	}
+        	else
+        	{
+        		break;
+        	}
+       	}
         
         grid.setOnMouseClicked(event ->
         {
@@ -631,7 +758,7 @@ public class HD_Grid
         		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo,btnSetting);
         		playerturn.increment();
         		try {
-					menu.set_playerturns(playerturn);
+					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -639,6 +766,20 @@ public class HD_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				String c = pcolor[playerturn.getCur_turn()];
+            	int tmp = 0;
+            	for(Node a: grid.getChildren())
+               	{
+                	if(tmp<151)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
@@ -646,7 +787,7 @@ public class HD_Grid
         		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo,btnSetting); 
         		playerturn.increment();
         		try {
-					menu.set_playerturns(playerturn);
+					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -654,6 +795,20 @@ public class HD_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				String c = pcolor[playerturn.getCur_turn()];
+            	int tmp = 0;
+            	for(Node a: grid.getChildren())
+               	{
+                	if(tmp<151)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
@@ -661,7 +816,7 @@ public class HD_Grid
         		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);  
         		playerturn.increment();
         		try {
-					menu.set_playerturns(playerturn);
+					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -669,6 +824,20 @@ public class HD_Grid
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+        		String c = pcolor[playerturn.getCur_turn()];
+        		int tmp = 0;
+				for(Node a: grid.getChildren())
+               	{
+                	if(tmp<151)
+                	{
+                		a.setStyle("-fx-border-color: "+c);
+                		tmp++;
+                	}
+                	else
+                	{
+                		break;
+                	}
+               	}
         		//currentStatus(sbox);
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
@@ -676,7 +845,7 @@ public class HD_Grid
         		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);
         		playerturn.increment();
         		try {
-					menu.set_playerturns(playerturn);
+					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -727,6 +896,7 @@ public class HD_Grid
         
         btnUndo.setOnAction(event->
         {
+        	btnUndo.setDisable(true);
         	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
         	for(int i=0;i<15;i++)
@@ -760,11 +930,25 @@ public class HD_Grid
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			String c = pcolor[playerturn.getCur_turn()];
+        	int tmp = 0;
+        	for(Node a: grid.getChildren())
+           	{
+            	if(tmp<151)
+            	{
+            		a.setStyle("-fx-border-color: "+c);
+            		tmp++;
+            	}
+            	else
+            	{
+            		break;
+            	}
+           	}
         });
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res) throws FileNotFoundException, ClassNotFoundException, IOException
+	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn,int res) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		this.start(sbox,totnum, playerturn,res);
 	}
