@@ -305,7 +305,7 @@ public class menu implements javafx.fxml.Initializable{
 					{
 						for(int j=0;j<sbox.length;j++)
 						{
-							if(!sbox[j][i].isEmpty())
+							if(sbox[j][i]==null && sbox[j][i].isEmpty()==false)
 							{
 								flag=1;
 								break;
@@ -336,7 +336,7 @@ public class menu implements javafx.fxml.Initializable{
 					{
 						for(int j=0;j<sbox.length;j++)
 						{
-							if(!sbox[j][i].isEmpty())
+							if(sbox[j][i] != null && sbox[j][i].isEmpty()==false)
 							{
 								flag=1;
 								break;

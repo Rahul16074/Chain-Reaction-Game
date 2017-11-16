@@ -140,6 +140,10 @@ public class Normal_Grid
             
             grid.getChildren().remove(box[y][x].getSphere1());
             box[y][x].setCount(box[y][x].getCount() - 1);
+            if(sbox[y][x]==null)
+            {
+            	return;
+            }
             sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
             zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
 			
@@ -283,7 +287,7 @@ public class Normal_Grid
 		grid.getChildren().remove(box[y1][x1].getSphere2());
 		grid.getChildren().remove(box[y1][x1].getSphere3());
 		box[y1][x1].setempty();
-		sbox[y1][x1].setEmpty();
+		if(sbox[y1][x1]!=null){sbox[y1][x1].setEmpty();}
 		try 
 		{
 			store_state(sbox);
@@ -324,6 +328,7 @@ public class Normal_Grid
         			{
         				grid.setDisable(false);
         			}
+        			
         		}
         		);
 				
@@ -349,19 +354,19 @@ public class Normal_Grid
         		box[y2][x2] = new Box();
         	}
         	
-        	if(box[y2][x2].getCount() == 0)
+        	if(box[y2][x2].getCount() == 0 && sbox[y2][x2]!=null)
         	{
         		zero(x2,y2,box,grid,sbox,color,btn,btn2,undo, setting);
         	}
-        	else if(box[y2][x2].getCount() == 1)
+        	else if(box[y2][x2].getCount() == 1 && sbox[y2][x2]!=null)
         	{       
         		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);       		
         	}
-        	else if(box[y2][x2].getCount() == 2)
+        	else if(box[y2][x2].getCount() == 2 && sbox[y2][x2]!=null)
             {        	
         		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);      		
             }
-        	else if(box[y2][x2].getCount() == 3)
+        	else if(box[y2][x2].getCount() == 3 && sbox[y2][x2]!=null)
         	{
         		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
         	}
@@ -509,6 +514,7 @@ public class Normal_Grid
                     		for(int j=0;j<6;j++)
                     		{
                     			sbox[i][j].reset();
+                    			sbox[i][j]=null;
                     		}
                     	}
                     	try {
@@ -534,19 +540,19 @@ public class Normal_Grid
 	{
 		if(x+1<=5)
 		{
-			split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
 		}
 		if(x-1>=0)
 		{
-			split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
 		}
 		if(y+1<=8)
 		{
-			split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
 		}
 		if(y-1>=0)
 		{
-			split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);}
 		}
 	}
 	
