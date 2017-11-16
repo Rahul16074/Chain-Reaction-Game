@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -136,13 +137,10 @@ public class Normal_Grid
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
             
-            if(!box[y][x].getColor().equals(color))
-            {
-            	grid.getChildren().remove(box[y][x].getSphere1());
-            	box[y][x].setCount(box[y][x].getCount() - 1);
-            	sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-            	zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
-            }
+            grid.getChildren().remove(box[y][x].getSphere1());
+            box[y][x].setCount(box[y][x].getCount() - 1);
+            sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
+            zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
@@ -218,15 +216,12 @@ public class Normal_Grid
 			circle.setCenterY(0);
 			circle.setRadius(10);
 			
-			if(!box[y][x].getColor().equals(color))
-			{
-				grid.getChildren().remove(box[y][x].getSphere1());
-				box[y][x].setCount(box[y][x].getCount() - 1);
-				sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-				zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
-			}
-			
 			grid.getChildren().remove(box[y][x].getSphere2());
+			grid.getChildren().remove(box[y][x].getSphere1());
+			box[y][x].setCount(box[y][x].getCount() - 1);
+			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
+			zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
+			
 			
 			PathTransition transitionCircle = new PathTransition();
 			transitionCircle.setPath(circle);
@@ -318,6 +313,20 @@ public class Normal_Grid
 		transitionCircle.setDuration(Duration.seconds(0.3));
 		transitionCircle.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
 		transitionCircle.setCycleCount(1);
+		transitionCircle.statusProperty().addListener(
+        		(o,olds,news) -> {
+        			if(news==Animation.Status.RUNNING)
+        			{
+        				grid.setDisable(true);
+        			}
+        			if(news==Animation.Status.STOPPED)
+        			{
+        				grid.setDisable(false);
+        			}
+        		}
+        		);
+				
+        
 		transitionCircle.play();		
 		
 		Timeline animationTimeLine = new Timeline(60, new KeyFrame(Duration.seconds(5), new KeyValue(sphere1.rotateProperty(), 360.0)));
@@ -327,6 +336,7 @@ public class Normal_Grid
         GridPane.setHalignment(line, HPos.CENTER);
         grid.add(sphere1,x1,y1);
         //grid.add(line,x1,y1);
+        
         
         transitionCircle.setOnFinished((ActionEvent event) -> {
         	
@@ -361,7 +371,7 @@ public class Normal_Grid
     			//System.out.println("hey");
     			String w=flag_obj.getWinner();
     			w=w.substring(0, 1);
-    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid);
+    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid,transitionCircle);
     			
     			/*Alert alert = new Alert(AlertType.INFORMATION);
     			alert.setTitle("Information Dialog");
@@ -375,7 +385,7 @@ public class Normal_Grid
         
 	}
 	
-	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid) {
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid, PathTransition transitionCircle) {
         final Stage dialog = new Stage();
         undo.setDisable(true);
         setting.setDisable(true);
@@ -383,6 +393,7 @@ public class Normal_Grid
         dialog.setTitle("Game Over");
         Button new_game = new Button("New Game");
         Button exit = new Button("Exit");
+
         Label displayLabel = new Label("Player "+winner+" is the winner");
         displayLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
 
@@ -420,8 +431,10 @@ public class Normal_Grid
                     	try {
 							store_state(sbox);
 						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
+							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                         dialog.close();
@@ -443,8 +456,10 @@ public class Normal_Grid
                     	try {
 							store_state(sbox);
 						} catch (FileNotFoundException e1) {
+							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
+							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                         dialog.close();
@@ -513,7 +528,7 @@ public class Normal_Grid
 	{
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
-        
+               
         menu m = new menu();
         Individual_Setting is = new Individual_Setting();
         Path currentRelativePath = Paths.get("");
@@ -551,13 +566,17 @@ public class Normal_Grid
         btnSetting.setStyle("-fx-font-size: 10pt;");
         btnSetting.setMinSize(80, 20);
         btnSetting.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
-		
+		btnUndo.setDisable(true);
+        
         HBox hbButtons=new HBox();
         hbButtons.setSpacing(10.0);
         hbButtons.getChildren().addAll(btnUndo,btnSetting,btnNewGame,btnExit);
         
         Box box[][] = new Box[9][6];
         Box prev[][] = new Box[9][6];
+        
+        
+        Block_serialize[][] prev_sbox=new Block_serialize[9][6];
         
         GridPane grid = new GridPane();
    
@@ -569,7 +588,7 @@ public class Normal_Grid
        	for(int i = 0; i < 9; i++) 
        	{
        		RowConstraints row = new RowConstraints(50);
-   	      grid.getRowConstraints().add(row);
+       		grid.getRowConstraints().add(row);
        	}
         
        	if(res==1)
@@ -615,6 +634,7 @@ public class Normal_Grid
         
         grid.setOnMouseClicked(event ->
         {
+        	btnUndo.setDisable(false);
         	list.remove(0, list.size());
         	list.addAll(grid.getChildren());
         	
@@ -623,9 +643,14 @@ public class Normal_Grid
         		for(int j=0;j<6;j++)
         		{
         			prev[i][j] = new Box();
+        			prev_sbox[i][j]=new Block_serialize();
         			if(box[i][j]!=null)
         			{
         				prev[i][j].copy(box[i][j]);
+        			}
+        			if(sbox[i][j]!=null)
+        			{
+        				prev_sbox[i][j].copy(sbox[i][j]);
         			}
         		}
         	}
@@ -646,8 +671,10 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -659,8 +686,10 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -672,8 +701,10 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -685,8 +716,10 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//synchroniseState(box,sbox);
@@ -732,6 +765,7 @@ public class Normal_Grid
         
         btnUndo.setOnAction(event->
         {
+        	btnUndo.setDisable(true);
         	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
         	for(int i=0;i<9;i++)
@@ -742,10 +776,29 @@ public class Normal_Grid
         			if(prev[i][j]!=null)
         			{
         				box[i][j].copy(prev[i][j]);
+        				sbox[i][j].copy(prev_sbox[i][j]);
         			}
         		}
         	}
         	playerturn.decrement();
+        	try {
+				menu.set_playerturns(playerturn);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	try {
+				store_state(sbox);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         });
         primaryStage.setScene(scene);
         primaryStage.show();

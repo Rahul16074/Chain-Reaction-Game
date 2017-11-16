@@ -162,8 +162,8 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
-				Block_serialize[][] sbox=new Block_serialize[16][10];
-				for(int i=0;i<16;i++)
+				Block_serialize[][] sbox=new Block_serialize[15][10];
+				for(int i=0;i<15;i++)
 				{
 					for(int j=0;j<10;j++)
 					{
@@ -205,7 +205,7 @@ public class menu implements javafx.fxml.Initializable{
 					}
 					Player_turn obj=new Player_turn(b);
 					set_playerturns(obj);
-					ex.run(sbox,n,obj);
+					ex.run(sbox,n,obj,0);
 				} 
 				catch (FileNotFoundException e1) 
 				{
@@ -237,7 +237,7 @@ public class menu implements javafx.fxml.Initializable{
 				// TODO Auto-generated method stub
 				
 				int n=0;
-				Normal_Grid ex=new Normal_Grid();
+				
 				try 
 				{
 					n=load();
@@ -297,35 +297,68 @@ public class menu implements javafx.fxml.Initializable{
 					e.printStackTrace();
 				}
 				
-				
-				int flag=0;
-				for(int i=0;i<sbox[0].length;i++)
+				if(sbox.length==15)
 				{
-					for(int j=0;j<sbox.length;j++)
+					HD_Grid ex=new HD_Grid();
+					int flag=0;
+					for(int i=0;i<sbox[0].length;i++)
 					{
-						if(!sbox[j][i].isEmpty())
+						for(int j=0;j<sbox.length;j++)
 						{
-							flag=1;
-							break;
+							if(!sbox[j][i].isEmpty())
+							{
+								flag=1;
+								break;
+							}
+						}
+					}
+					if(flag==1)
+					{
+						try {
+							ex.run(sbox, n, pl,1);
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
 				}
-				if(flag==1)
+				else
 				{
-					try {
-						ex.run(sbox, n, pl,1);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					Normal_Grid ex=new Normal_Grid();
+					int flag=0;
+					for(int i=0;i<sbox[0].length;i++)
+					{
+						for(int j=0;j<sbox.length;j++)
+						{
+							if(!sbox[j][i].isEmpty())
+							{
+								flag=1;
+								break;
+							}
+						}
 					}
-				}
-								
+					if(flag==1)
+					{
+						try {
+							ex.run(sbox, n, pl,1);
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}		
 			}
 			
 		});
@@ -441,7 +474,7 @@ public class menu implements javafx.fxml.Initializable{
 		out.close();
 	}
 	
-	public void set_playerturns(Player_turn obj) throws FileNotFoundException, IOException
+	static void set_playerturns(Player_turn obj) throws FileNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();

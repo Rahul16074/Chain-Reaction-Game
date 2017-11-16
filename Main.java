@@ -14,8 +14,8 @@ public class Main extends Application {
 		this.primaryStage=primaryStage;
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
 		primaryStage.setTitle("CHAIN REACTION GAME");
-		try {
-			
+		try 
+		{	
 			AnchorPane root =FXMLLoader.load(getClass().getResource("main_menu.fxml"));
 			Scene scene=new Scene(root);
 			primaryStage.setScene(scene);

@@ -216,6 +216,28 @@ public class Player_turn implements Serializable{
 		}
 	}
 	
+	public HD_Grid.cond isWinnerHD(HD_Grid.cond obj)
+	{
+		int flag=0;
+		int index=0;
+		for(int i=0;i<8;i++)
+		{
+			if(player[i]==true)
+			{
+				//System.out.println("added at:"+i);
+				flag+=1;
+				index=i;
+			}
+		}
+		if(flag==1)
+		{
+			obj.setWinner(index+1+" is the winner");
+			obj.add();
+			//System.out.println(index+1+" is the winner");
+		}
+		return obj;
+	}
+	
 	public Normal_Grid.cond isWinner(Normal_Grid.cond obj)
 	{
 		int flag=0;

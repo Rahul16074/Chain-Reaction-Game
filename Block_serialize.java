@@ -46,5 +46,10 @@ public class Block_serialize implements Serializable{
 		color=null;
 		no_spheres=0;
 	}
+	public void copy(Block_serialize sbox)
+	{
+		this.color=sbox.color;
+		this.no_spheres=sbox.no_spheres;
+	}
 	
 }
