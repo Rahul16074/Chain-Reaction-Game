@@ -136,10 +136,13 @@ public class Normal_Grid
             sphere.setMaterial(material);
             sphere.setEffect(new Lighting());
             
-            grid.getChildren().remove(box[y][x].getSphere1());
-            box[y][x].setCount(box[y][x].getCount() - 1);
-            sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-            zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
+            if(!box[y][x].getColor().equals(color))
+            {
+            	grid.getChildren().remove(box[y][x].getSphere1());
+            	box[y][x].setCount(box[y][x].getCount() - 1);
+            	sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
+            	zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
+            }
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
@@ -215,12 +218,15 @@ public class Normal_Grid
 			circle.setCenterY(0);
 			circle.setRadius(10);
 			
-			grid.getChildren().remove(box[y][x].getSphere2());
-			grid.getChildren().remove(box[y][x].getSphere1());
-			box[y][x].setCount(box[y][x].getCount() - 1);
-			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-			zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
+			if(!box[y][x].getColor().equals(color))
+			{
+				grid.getChildren().remove(box[y][x].getSphere1());
+				box[y][x].setCount(box[y][x].getCount() - 1);
+				sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
+				zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
+			}
 			
+			grid.getChildren().remove(box[y][x].getSphere2());
 			
 			PathTransition transitionCircle = new PathTransition();
 			transitionCircle.setPath(circle);
@@ -377,7 +383,6 @@ public class Normal_Grid
         dialog.setTitle("Game Over");
         Button new_game = new Button("New Game");
         Button exit = new Button("Exit");
-
         Label displayLabel = new Label("Player "+winner+" is the winner");
         displayLabel.setFont(Font.font(null, FontWeight.BOLD, 14));
 
@@ -415,10 +420,8 @@ public class Normal_Grid
                     	try {
 							store_state(sbox);
 						} catch (FileNotFoundException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                         dialog.close();
@@ -440,10 +443,8 @@ public class Normal_Grid
                     	try {
 							store_state(sbox);
 						} catch (FileNotFoundException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
                         dialog.close();
@@ -645,10 +646,8 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -660,10 +659,8 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -675,10 +672,8 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//currentStatus(sbox);
@@ -690,10 +685,8 @@ public class Normal_Grid
         		try {
 					m.set_playerturns(playerturn);
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
         		//synchroniseState(box,sbox);
