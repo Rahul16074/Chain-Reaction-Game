@@ -7,6 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This program initializes the main game window
+ * @author Vipul Saini
+ * @author Rahul Lawaria
+ *
+ */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
@@ -22,7 +28,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
 	public static void main(String[] args) {
 		launch(args);
 	}

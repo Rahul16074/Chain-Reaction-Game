@@ -37,34 +37,70 @@ import javafx.util.Duration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * <h1> Play Chain Reaction on a 15*10 Grid !!</h1>
+ * This program initialize a 15*10 grid on which multiple players can play Chain Reaction
+ * game.
+ * @author Rahul Lawaria
+ * @author Vipul Saini
+ *
+ */
 
 public class HD_Grid
 {
 	int global_flag=0;
+	/**
+	 * This class is used to find out which player has won the game
+	 * @author Vipul Saini
+	 *
+	 */
 	public class cond{
 		private int count;
 		private String winner;
+		/**
+		 * Constructor to initialize the variables
+		 */
 		public cond()
 		{
 			count=0;
 			winner=null;
 		}
+		/**
+		 * This function add 1 to the counter
+		 * @return Nothing
+		 */
 		public void add()
 		{
 			count+=1;
 		}
+		/**
+		 * This function us used to get the present value of counter 
+		 * @return int Returns counter value
+		 */
 		public int getCount()
 		{
 			return count;
 		}
+		/**
+		 * This function sets the winner 
+		 * @param text This is the first and only parameter to this function
+		 * @return Nothing
+		 */
 		public void setWinner(String text)
 		{
 			winner=text;
 		}
+		/**
+		 * This function is used to retrieve the winning player
+		 * @return String Returns the player who has won the game
+		 */
 		public String getWinner()
 		{
 			return winner;
 		}
+		/**
+		 * This function resets the counter to zero and sets winner to null
+		 */
 		public void reset()
 		{
 			count=0;
@@ -73,6 +109,21 @@ public class HD_Grid
 	}
 	cond flag_obj=new cond();
 	Utility ut = new Utility();
+	/**
+	 * This method is used to initialize a sphere of color corresponding to player  in an empty cell
+	 * @param x The first parameter is the x coordinate of the cell
+	 * @param y Second parameter is the y coordinate of the cell
+	 * @param box The third parameter is the current state of the grid
+	 * @param grid The fourth parameter is the current grid on which the game is being played
+	 * @param sbox The fifth parameter is the serialized state of the grid
+	 * @param color The sixth parameter is the color of corresponding player
+	 * @param playerturn The seventh parameter is the object of Player_turn that decides the flow of turns
+	 * @param btn The eighth parameter is the button that starts new game
+	 * @param btn2 The ninth parameter is the button that exits the game
+	 * @param undo The tenth parameter is the Undo button 
+	 * @param stage The eleventh parameter is the stage on which game is initialized 
+	 
+	 */
 	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2, Button undo,Stage stage)
 	{
 		Sphere sphere = new Sphere(7);
@@ -114,6 +165,22 @@ public class HD_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
+	/**
+	 * This method is used to initialize a sphere of color corresponding to player in a cell 
+	 * with one orb already in it 
+	 * @param x The first parameter is the x coordinate of the cell
+	 * @param y Second parameter is the y coordinate of the cell
+	 * @param box The third parameter is the current state of the grid
+	 * @param grid The fourth parameter is the current grid on which the game is being played
+	 * @param sbox The fifth parameter is the serialized state of the grid
+	 * @param color The sixth parameter is the color of corresponding player
+	 * @param playerturn The seventh parameter is the object of Player_turn that decides the flow of turns
+	 * @param btn The eighth parameter is the button that starts new game
+	 * @param btn2 The ninth parameter is the button that exits the game
+	 * @param undo The tenth parameter is the Undo button 
+	 * @param stage The eleventh parameter is the stage on which game is initialized 
+	 
+	 */
 	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo,Stage stage)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=14) && (x!=9 || y!=0) && (x!=9 || y!=14) )
@@ -185,6 +252,22 @@ public class HD_Grid
 			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2,undo,stage );
 		}
 	}
+	
+	/**
+	 * This method is used to initialize a sphere of color corresponding to player in a cell
+	 * which has 2 orbs already in it
+	 * @param x The first parameter is the x coordinate of the cell
+	 * @param y Second parameter is the y coordinate of the cell
+	 * @param box The third parameter is the current state of the grid
+	 * @param grid The fourth parameter is the current grid on which the game is being played
+	 * @param sbox The fifth parameter is the serialized state of the grid
+	 * @param color The sixth parameter is the color of corresponding player
+	 * @param playerturn The seventh parameter is the object of Player_turn that decides the flow of the game
+	 * @param btn The eighth parameter is the button that starts new game
+	 * @param btn2 The ninth parameter is the button that exits the game
+	 * @param undo The tenth parameter is the Undo button 
+	 * @param stage The eleventh parameter is the stage on which game is initialized 
+	 */
 	
 	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo,Stage stage)
 	{
@@ -267,6 +350,28 @@ public class HD_Grid
 			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo,stage );
 		}
 	}
+	
+	/**
+	 * This method moves orbs from source cell to destination cell at the time of splitting 
+	 * @param x1 The first parameter is the initial x coordinate of the orb
+	 * @param y1 The second parameter is the initial y coordinate of the orb
+	 * @param x2 The third parameter is the new x coordinate of the orb
+	 * @param y2 The fourth parameter is the new y coordinate of the orb
+	 * @param p1 The fifth parameter is the x coordinate of one end of line
+	 * @param q1 The sixth parameter is the y coordinate of one end of line
+	 * @param p2 The seventh parameter is the x coordinate of other end of the line
+	 * @param q2 The eighth parameter is the y coordinate of other end of the line
+	 * @param box
+	 * @param grid
+	 * @param sbox
+	 * @param color
+	 * @param playerturn
+	 * @param btn
+	 * @param btn2
+	 * @param undo
+	 * @param val
+	 * @param stage
+	 */
 	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, int val, Stage stage)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
@@ -425,7 +530,7 @@ public class HD_Grid
      				String w=flag_obj.getWinner();
      				w=w.substring(0, 1);
      				stage.setOnCloseRequest(e->e.consume());
-     				ut.popup(Integer.parseInt(w),btn,btn2,sbox,undo ,grid,transitionCircle);
+     				ut.popup(Integer.parseInt(w),btn,btn2,sbox,undo ,grid);
      				global_flag=1;
 	    			/*Alert alert = new Alert(AlertType.INFORMATION);
 	    			alert.setTitle("Information Dialog");
@@ -440,6 +545,21 @@ public class HD_Grid
         
 	}
 	
+	/**
+	 * The splitmain method splits the orbs and decides their destinations when the critical mass
+	 * of a cell exceeds its maximum value
+	 * @param x The first parameter is the x coordinate of the cell
+	 * @param y Second parameter is the y coordinate of the cell
+	 * @param box The third parameter is the current state of the grid
+	 * @param grid The fourth parameter is the current grid on which the game is being played
+	 * @param sbox The fifth parameter is the serialized state of the grid
+	 * @param color The sixth parameter is the color of corresponding player
+	 * @param playerturn The seventh parameter is the object of Player_turn that decides the flow of turns
+	 * @param btn The eighth parameter is the button that starts new game
+	 * @param btn2 The ninth parameter is the button that exits the game
+	 * @param undo The tenth parameter is the Undo button 
+	 * @param stage The eleventh parameter is the stage on which game is initialized 
+	 */
 	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2,Button undo, Stage stage)
 	{
 		if(x+1<=9)
@@ -460,6 +580,16 @@ public class HD_Grid
 		}
 	}
 	
+	/**
+	 * The start method initializes the whole grid with total number of players who have to play the game
+	 * @param sbox The first parameter is the grid state which was serialized in the previous game  
+	 * @param totnum The second parameter is the total number of players playing the game
+	 * @param playerturn The third parameter is the object of type Player_turn that decides the order in which players take turn 
+	 * @param res The fourth parameter is an indicator to either resume the previous game or start a new one
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		global_flag=0;
@@ -828,6 +958,17 @@ public class HD_Grid
         stage.setScene(scene);
         stage.show();
     }
+	
+	/**
+	 * This method takes parameters and pass them on to start() method to start the game
+	 * @param sbox The first parameter is the grid state which was serialized in the previous game  
+	 * @param totnum The second parameter is the total number of players playing the game
+	 * @param playerturn The third parameter is the object of type Player_turn that decides the order in which players take turn 
+	 * @param res The fourth parameter is an indicator to either resume the previous game or start a new one
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void run(Block_serialize[][] sbox, int totnum, Player_turn playerturn,int res) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		this.start(sbox,totnum, playerturn,res);

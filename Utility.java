@@ -24,9 +24,24 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+
+/**
+ * This class provides methods that are used by all the other classes
+ * @author Rahul Lawaria
+ * @author Vipul Saini
+ *
+ */
 public class Utility {
-	
-	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, GridPane grid, PathTransition transitionCircle) 
+	/**
+	 * This method displays the winner on the screen, locking the state of the game
+	 * @param winner The first parameter takes the integer input corresponding to the player who won the game
+	 * @param btn The second parameter is the button to start a new game
+	 * @param btn2 The third parameter is the button to exit the game
+	 * @param sbox The fourth parameter is the current serialized state of the grid
+	 * @param undo The sixth parameter is the undo button
+	 * @param grid The seventh parameer is the current grid
+	 */
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, GridPane grid) 
 	{
         final Stage dialog = new Stage();
         undo.setDisable(true);
@@ -135,6 +150,13 @@ public class Utility {
         dialog.show();
     }
 	
+	/**
+	 * This method stores the current state of the grid in the form of serializable class 
+	 * @param sbox The first parameter is the object of Serializable class Block_serialize which is stored in a file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	
 	public void store_state(Block_serialize[][] sbox) throws FileNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -147,6 +169,13 @@ public class Utility {
 		out.close();
 	}
 	
+	/**
+	 * This method gives the current state of the block by deserializing it from the file Block_state 
+	 * @return Returns object of type Block_serialize[][] 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	static Block_serialize[][] get_state() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -167,19 +196,14 @@ public class Utility {
 		input.close();
 		return obj;
 	}
-	
-	public void currentStatus(Block_serialize[][] sbox)
-	{
-		for(int i=0;i<9;i++)
-		{
-			for(int j=0;j<6;j++)
-			{
-				System.out.print(sbox[i][j].getColor()+" "+sbox[i][j].getSphereCount()+" ");
-			}
-			System.out.println();
-		}
-	}
-	
+		
+	/**
+	 * This method returns the number of players supposed to play the game from the file playerCount.txt
+	 * @return Returns integer denoting the number of players who have to play the game
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public int load() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		initializePlayers();
@@ -203,6 +227,12 @@ public class Utility {
 		input.close();
 		return num;
 	}
+	
+	/**
+	 * This method initializes the number of players to 2, when the give is run for the first time
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void initializePlayers() throws FileNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -227,6 +257,12 @@ public class Utility {
 			input.close();
 		}
 	}
+	
+	/**
+	 * This method sets the number of players who wish to play the next game and serialize it in a file playerCount.txt 
+	 * @param s The first parameter is the String denoting the number of players willing to play the game
+	 * @throws IOException
+	 */
 	public void setPlayerCount(String s) throws IOException
 	{
 		int num=2;
@@ -271,6 +307,12 @@ public class Utility {
 		return;
 	}
 	
+	/**
+	 * 
+	 * @param sbox
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void storeGridState(Block_serialize[][] sbox) throws FileNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -283,6 +325,12 @@ public class Utility {
 		out.close();
 	}
 	
+	/**
+	 * This function stores the current state of players including the current turn, total players in a file Player_turn.txt
+	 * @param obj First parameter is the object of type Player_turn that is serialized in the file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	public void set_playerturns(Player_turn obj) throws FileNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -294,6 +342,14 @@ public class Utility {
 		out.writeObject(obj);
 		out.close();
 	}
+	
+	/**
+	 * This method returns the player turns that is stored in Player_turn.txt 
+	 * @return Returns object of type Player_turn that has current status of the player turns
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	
 	public Player_turn get_playerturns() throws FileNotFoundException, IOException, ClassNotFoundException
 	{
@@ -318,7 +374,9 @@ public class Utility {
 		return obj;
 	}
 	
-	
+	/**
+	 * This method initializes the current settings with the changed settings and serializes it to savedSettings.txt 
+	 */
 	public void combineSettings()
 	{
 		Path currentRelativePath = Paths.get("");

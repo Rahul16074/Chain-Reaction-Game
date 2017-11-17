@@ -24,8 +24,17 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 
+/**
+ * This program is used to set, change the colors of players
+ * @author Rahul Lawaria
+ * @author Vipul Saini
+ */
 public class Individual_Setting{
-	
+	/**
+	 * This method initializes color for the specified player and gives a list to choose color from it
+	 * @param color First parameter is the color of the player
+	 * @param num Second parameter is the player number
+	 */
 	public void start(String color, int num) {
         Stage primaryStage=new Stage();
 		primaryStage.setTitle("Chain Reaction Preferences");
@@ -60,6 +69,13 @@ public class Individual_Setting{
         primaryStage.show();
     }
 
+	/**
+	 * This method initializes the color of he player corresponding to the parameter passed
+	 * @param num First parameter is the player number
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
 	public void run(int num) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		Path currentRelativePath = Paths.get("");
@@ -103,6 +119,13 @@ public class Individual_Setting{
 		}
 		this.start(color, num);
 	}
+	/**
+	 * This method writes the current state of players color in a text file
+	 * @param location First parameter is the location where the text file exists
+	 * @param obj Second parameter is the object that is to be serialized
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
 	static void add(String location, serializedSetting obj) throws FileNotFoundException, IOException
 	{
 		ObjectOutputStream out=null;
@@ -111,6 +134,13 @@ public class Individual_Setting{
 		out.writeObject(obj);
 		out.close();
 	}
+	/**
+	 * This method initializes an empty file with default color of players
+	 * @param location First parameter is the location of the text file
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
 	public void load(String location) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream input=null;
@@ -127,6 +157,10 @@ public class Individual_Setting{
 		}
 		input.close();
 	}
+	/*
+	 * This method gives the current player setting that stores the color of players
+	 * @param location First parameter is the location of file where setting is serialized 
+	 */
 	static serializedSetting read(String location) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
 		ObjectInputStream input=null;
@@ -143,6 +177,11 @@ public class Individual_Setting{
 		input.close();
 		return obj;
 	}
+	/**
+	 * this function changes/swaps the color of one player with color of another player 
+	 * @param color First parameter is the color of type Color
+	 * @param num Second parameter is the player whose color is changed
+	 */
 	public void change(String color, int num)
 	{
 		Path currentRelativePath = Paths.get("");

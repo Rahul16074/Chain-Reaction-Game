@@ -7,9 +7,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+/**
+ * This program initializes the list of settings of total players 
+ * @author Rahul Lawaria
+ *
+ */
 public class Player_Setting{
-	
+	/**
+	 * This method initializes the list of total players settings 
+	 */
 	public void start() {
         Stage primaryStage=new Stage();
         primaryStage.setTitle("Chain Reaction Preferences");
