@@ -30,8 +30,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -56,7 +60,8 @@ import javafx.collections.ObservableList;
 
 public class Normal_Grid
 {
-	public class cond{
+		int global_flag=0;
+		public class cond{
 		private int count;
 		private String winner;
 		public cond()
@@ -87,7 +92,7 @@ public class Normal_Grid
 		}
 	}
 	cond flag_obj=new cond();
-	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2, Button undo, Button setting)
+	public void zero(int x,int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Button btn, Button btn2, Button undo)
 	{
 		Sphere sphere = new Sphere(10);
     	PhongMaterial material = new PhongMaterial();
@@ -128,7 +133,7 @@ public class Normal_Grid
 		box[y][x].setSphere1(sphere);
 	}
 	
-	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
+	public void one(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo)
 	{
 		if((x!=0 || y!=0) &&  (x!=0 || y!=8) && (x!=5 || y!=0) && (x!=5 || y!=8) )
 		{
@@ -145,7 +150,7 @@ public class Normal_Grid
             	return;
             }
             sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-            zero(x,y,box,grid,sbox,color,btn,btn2, undo, setting);
+            zero(x,y,box,grid,sbox,color,btn,btn2, undo);
 			
 			Circle circle = new Circle(10,Color.TRANSPARENT);
 			circle.setCenterX(0);
@@ -196,11 +201,11 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2,undo, setting);
+			splitmain(x,y,box,grid, sbox, color, playerturn,btn,btn2,undo);
 		}
 	}
 	
-	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
+	public void two(int x, int y, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color,Player_turn playerturn, Button btn, Button btn2,Button undo)
 	{
 		if(x!=0 && x!=5 && y!=0 && y!=8)
 		{
@@ -225,7 +230,7 @@ public class Normal_Grid
 			grid.getChildren().remove(box[y][x].getSphere1());
 			box[y][x].setCount(box[y][x].getCount() - 1);
 			sbox[y][x].setSphereCount(sbox[y][x].getSphereCount()-1);
-			zero(x,y,box,grid,sbox,color,btn,btn2,undo, setting);
+			zero(x,y,box,grid,sbox,color,btn,btn2,undo);
 			
 			
 			PathTransition transitionCircle = new PathTransition();
@@ -278,10 +283,10 @@ public class Normal_Grid
 		}
 		else
 		{
-			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+			splitmain(x,y,box,grid,sbox,color,playerturn,btn,btn2,undo);
 		}
 	}
-	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, Button setting, int val)
+	public void split(int x1, int y1,int x2, int y2,int p1, int q1, int p2,int q2, Box box[][], GridPane grid, Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2, Button undo, int val)
 	{
 		grid.getChildren().remove(box[y1][x1].getSphere1());
 		grid.getChildren().remove(box[y1][x1].getSphere2());
@@ -324,9 +329,13 @@ public class Normal_Grid
         			{
         				grid.setDisable(true);
         			}
-        			if(news==Animation.Status.STOPPED)
+        			if(news==Animation.Status.STOPPED && global_flag==0)
         			{
         				grid.setDisable(false);
+        			}
+        			if(news==Animation.Status.STOPPED && global_flag==1)
+        			{
+        				grid.setDisable(true);
         			}
         			
         		}
@@ -356,19 +365,19 @@ public class Normal_Grid
         	
         	if(box[y2][x2].getCount() == 0 && sbox[y2][x2]!=null)
         	{
-        		zero(x2,y2,box,grid,sbox,color,btn,btn2,undo, setting);
+        		zero(x2,y2,box,grid,sbox,color,btn,btn2,undo);
         	}
         	else if(box[y2][x2].getCount() == 1 && sbox[y2][x2]!=null)
         	{       
-        		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);       		
+        		one(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo);       		
         	}
         	else if(box[y2][x2].getCount() == 2 && sbox[y2][x2]!=null)
             {        	
-        		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);      		
+        		two(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo);      		
             }
         	else if(box[y2][x2].getCount() == 3 && sbox[y2][x2]!=null)
         	{
-        		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo, setting);
+        		splitmain(x2,y2,box,grid,sbox,color,playerturn,btn,btn2,undo);
         	}
         	//currentStatus(sbox);
         	//System.out.println();
@@ -436,7 +445,7 @@ public class Normal_Grid
     			//System.out.println("hey");
     			String w=flag_obj.getWinner();
     			w=w.substring(0, 1);
-    			popup(Integer.parseInt(w),btn,btn2,sbox,undo, setting,grid,transitionCircle);
+    			popup(Integer.parseInt(w),btn,btn2,sbox,undo,grid,transitionCircle);
     			
     			/*Alert alert = new Alert(AlertType.INFORMATION);
     			alert.setTitle("Information Dialog");
@@ -451,10 +460,10 @@ public class Normal_Grid
         
 	}
 	
-	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, Button setting, GridPane grid, PathTransition transitionCircle) {
+	public void popup(int winner,Button btn, Button btn2,Block_serialize[][] sbox, Button undo, GridPane grid, PathTransition transitionCircle) {
         final Stage dialog = new Stage();
+        global_flag=1;
         undo.setDisable(true);
-        setting.setDisable(true);
         grid.setDisable(true);
         dialog.setTitle("Game Over");
         Button new_game = new Button("New Game");
@@ -539,23 +548,23 @@ public class Normal_Grid
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2,Button undo, Button setting)
+	public void splitmain(int x, int y, Box box[][], GridPane grid,Block_serialize[][] sbox, Color color, Player_turn playerturn, Button btn, Button btn2,Button undo)
 	{
 		if(x+1<=5)
 		{
-			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
+			if(sbox[y][x+1]!=null){split(x,y,x+1,y,0,0,50,0,box,grid,sbox,color,playerturn,btn,btn2,undo,0);}
 		}
 		if(x-1>=0)
 		{
-			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,0);}
+			if(sbox[y][x-1]!=null){split(x,y,x-1,y,0,0,-50,0,box,grid,sbox,color,playerturn,btn,btn2,undo,0);}
 		}
 		if(y+1<=8)
 		{
-			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
+			if(sbox[y+1][x]!=null){split(x,y,x,y+1,0,0,0,50,box,grid,sbox,color,playerturn,btn,btn2,undo,1);}
 		}
 		if(y-1>=0)
 		{
-			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo, setting,1);}
+			if(sbox[y-1][x]!=null){split(x,y,x,y-1,0,0,0,-50,box,grid,sbox,color,playerturn,btn,btn2,undo,1);}
 		}
 	}
 	
@@ -593,6 +602,7 @@ public class Normal_Grid
 	}
 	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
 	{
+		global_flag=0;
 		Stage primaryStage=new Stage();
         primaryStage.setTitle("Game");
                
@@ -620,28 +630,37 @@ public class Normal_Grid
 		pcolor[6] = obj.color7;
 		pcolor[7] = obj.color8;
         
+		
+		
+		MenuItem newGame=new MenuItem("New Game");
+		MenuItem exit=new MenuItem("Exit");
+		FileInputStream input = new FileInputStream(Paths.get("").toAbsolutePath().toString()+"\\src\\application\\dropdown.png");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(19);
+        imageView.setFitHeight(17);
+        MenuButton menuButton = new MenuButton("", imageView, newGame, exit);
+
+
+        
+        
         Button btnUndo = new Button("Undo");
         Button btnNewGame = new Button("New Game");
         Button btnExit = new Button("Exit");
-        Button btnSetting = new Button("Setting");
+       // Button btnSetting = new Button("Setting");
 
         btnUndo.setStyle("-fx-font-size: 10pt;");
         btnUndo.setMinSize(80, 20);
         btnUndo.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
-        btnNewGame.setStyle("-fx-font-size: 10pt;");
-        btnNewGame.setMinSize(80, 20);
-        btnNewGame.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
-        btnExit.setStyle("-fx-font-size: 10pt;");
-        btnExit.setMinSize(80, 20);
-        btnExit.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
-        btnSetting.setStyle("-fx-font-size: 10pt;");
-        btnSetting.setMinSize(80, 20);
-        btnSetting.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
+        menuButton.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
+        //btnSetting.setStyle("-fx-font-size: 10pt;");
+        //btnSetting.setMinSize(80, 20);
+        //btnSetting.setStyle("-fx-border-color: #ffffff; -fx-border-width: 1px;-fx-background-color: #202020;-fx-text-fill: #ffffff");
 		btnUndo.setDisable(true);
         
         HBox hbButtons=new HBox();
         hbButtons.setSpacing(10.0);
-        hbButtons.getChildren().addAll(btnUndo,btnSetting,btnNewGame,btnExit);
+        hbButtons.getChildren().addAll(btnUndo,menuButton);
         
         Box box[][] = new Box[9][6];
         Box prev[][] = new Box[9][6];
@@ -684,19 +703,19 @@ public class Normal_Grid
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				zero(j,i,box,grid,sbox,color, btnNewGame, btnExit, btnUndo, btnSetting);
+        				zero(j,i,box,grid,sbox,color, btnNewGame, btnExit, btnUndo);
         			}
         			if(sbox[i][j].getSphereCount()>=2)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				one(j,i,box,grid,sbox,color,playerturn,btnNewGame, btnExit, btnUndo, btnSetting);
+        				one(j,i,box,grid,sbox,color,playerturn,btnNewGame, btnExit, btnUndo);
         			}
         			if(sbox[i][j].getSphereCount()>=3)
         			{
         				sbox[i][j].setSphereCount(sbox[i][j].getSphereCount()-1);
         				Color color = Color.valueOf(sbox[i][j].getColor());
-        				two(j,i,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);
+        				two(j,i,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo);
         			}
         		}
         	}
@@ -760,7 +779,7 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
-        		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo,btnSetting);
+        		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -789,7 +808,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
-        		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo,btnSetting); 
+        		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo); 
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -818,7 +837,7 @@ public class Normal_Grid
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
             {        	
-        		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);  
+        		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo);  
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -847,7 +866,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
-        		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,btnSetting);
+        		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo);
         		playerturn.increment();
         		try {
 					m.set_playerturns(playerturn);
@@ -864,11 +883,22 @@ public class Normal_Grid
         	//System.out.println();
         });
 
+        
         btnExit.setOnAction(event->
         {
         	primaryStage.close();
         });
 
+        newGame.setOnAction(event ->
+        {
+        	btnNewGame.fire();
+        });
+        
+        exit.setOnAction(event ->
+        {
+        	btnExit.fire();
+        });
+        
         btnNewGame.setOnAction(event->
         {
         	primaryStage.close();
@@ -892,13 +922,7 @@ public class Normal_Grid
 				e.printStackTrace();
 			}
         });
-        
-        btnSetting.setOnAction(event->
-        {
-        	Player_Setting p=new Player_Setting();
-        	p.run();
-        });
-        
+                
         btnUndo.setOnAction(event->
         {
         	btnUndo.setDisable(true);
