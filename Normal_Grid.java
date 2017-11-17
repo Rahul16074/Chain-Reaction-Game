@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Circle;
@@ -426,6 +428,9 @@ public class Normal_Grid
     			String w=flag_obj.getWinner();
     			w=w.substring(0, 1);
     			stage.setOnCloseRequest(e->e.consume());
+    			final java.net.URL resource = getClass().getResource("winning.wav");
+                final AudioClip clip = new AudioClip(resource.toString());
+                clip.play();
     			ut.popup(Integer.parseInt(w),btn,btn2,sbox,undo,grid,transitionCircle);
     			global_flag=1;
     			/*Alert alert = new Alert(AlertType.INFORMATION);
@@ -606,6 +611,9 @@ public class Normal_Grid
         
         grid.setOnMouseClicked(event ->
         {
+        	final java.net.URL resource = getClass().getResource("Beep1.wav");
+            final AudioClip clip = new AudioClip(resource.toString());
+        	
         	btnUndo.setDisable(false);
         	list.remove(0, list.size());
         	list.addAll(grid.getChildren());
@@ -638,6 +646,8 @@ public class Normal_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
+                clip.play(0.5);
+        		
         		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo,stage);
         		playerturn.increment();
         		try {
@@ -666,7 +676,9 @@ public class Normal_Grid
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
-        	{       
+        	{  
+        		clip.play(0.5);
+        		
         		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo,stage); 
         		playerturn.increment();
         		try {
@@ -695,7 +707,9 @@ public class Normal_Grid
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
-            {        	
+            { 
+        		clip.play(0.5);
+        		
         		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,stage);  
         		playerturn.increment();
         		try {
@@ -725,6 +739,7 @@ public class Normal_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
+        		clip.play(0.5);
         		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,stage);
         		playerturn.increment();
         		try {
