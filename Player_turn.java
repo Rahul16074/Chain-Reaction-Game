@@ -141,7 +141,7 @@ public class Player_turn implements Serializable{
 		for(int i=0;i<8;i++)
 		{
 			String col=null;
-			if(player[i]==true && i!=prev_turn)
+			if(i!=prev_turn)
 			{
 				if(i==0)
 				{
@@ -192,6 +192,10 @@ public class Player_turn implements Serializable{
 				{
 					//System.out.println("false at :"+i);
 					player[i]=false;
+				}
+				else if(flag==1)
+				{
+					player[i]=true;
 				}
 			}
 		}

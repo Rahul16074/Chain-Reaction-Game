@@ -408,7 +408,7 @@ public class HD_Grid
      			int tmp = 0;
      			for(Node a: grid.getChildren())
      			{
-     				if(tmp<55)
+     				if(tmp<151)
      				{
      					a.setStyle("-fx-border-color: "+col);
      					tmp++;
