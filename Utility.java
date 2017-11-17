@@ -80,9 +80,9 @@ public class Utility {
                     public void handle(MouseEvent e) {
                     	btn.setDisable(false);
                     	btn.fire();
-                    	for(int i=0;i<9;i++)
+                    	for(int i=0;i<sbox.length;i++)
                     	{
-                    		for(int j=0;j<6;j++)
+                    		for(int j=0;j<sbox[0].length;j++)
                     		{
                     			sbox[i][j].reset();
                     		}
@@ -105,9 +105,9 @@ public class Utility {
                     public void handle(MouseEvent e) {
                     	btn2.setDisable(false);
                     	btn2.fire();
-                    	for(int i=0;i<9;i++)
+                    	for(int i=0;i<sbox.length;i++)
                     	{
-                    		for(int j=0;j<6;j++)
+                    		for(int j=0;j<sbox[0].length;j++)
                     		{
                     			sbox[i][j].reset();
                     			sbox[i][j]=null;

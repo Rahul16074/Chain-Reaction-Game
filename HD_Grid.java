@@ -426,7 +426,7 @@ public class HD_Grid
      				w=w.substring(0, 1);
      				stage.setOnCloseRequest(e->e.consume());
      				ut.popup(Integer.parseInt(w),btn,btn2,sbox,undo ,grid,transitionCircle);
-     				
+     				global_flag=1;
 	    			/*Alert alert = new Alert(AlertType.INFORMATION);
 	    			alert.setTitle("Information Dialog");
 	    			alert.setHeaderText("Look, an Information Dialog");
