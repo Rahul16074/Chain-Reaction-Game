@@ -2,7 +2,6 @@ package application;
 
 
 import java.io.EOFException;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -66,8 +65,6 @@ public class Individual_Setting{
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String location=s+"\\src\\application";
-		File folder = new File(location);
-		File[] listOfFiles = folder.listFiles();
 		location=location+"\\tempSetting.txt";
 		load(location);
 		String color="";
@@ -152,8 +149,6 @@ public class Individual_Setting{
 		
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String location=s+"\\src\\application";
-		File folder = new File(location);
-		File[] listOfFiles = folder.listFiles();
 		location=location+"\\tempSetting.txt";
 		try 
 		{

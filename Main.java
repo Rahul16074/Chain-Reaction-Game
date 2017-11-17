@@ -8,10 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
 public class Main extends Application {
-	private Stage primaryStage;
 	@Override
 	public void start(Stage primaryStage) {
-		this.primaryStage=primaryStage;
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
 		primaryStage.setTitle("CHAIN REACTION GAME");
 		try 

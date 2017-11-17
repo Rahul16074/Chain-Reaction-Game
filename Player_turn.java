@@ -1,6 +1,5 @@
 package application;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,6 +10,8 @@ import java.util.Arrays;
 import javafx.scene.paint.Color;
 
 public class Player_turn implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int players_left;
 	private int prev_turn;
 	private int cur_turn;
@@ -123,8 +124,6 @@ public class Player_turn implements Serializable{
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		String location=s+"\\src\\application";
-		File folder = new File(location);
-		File[] listOfFiles = folder.listFiles();
 		location=location+"\\savedSettings.txt";
 		serializedSetting obj=null;
 		try {

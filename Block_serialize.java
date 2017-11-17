@@ -2,9 +2,8 @@ package application;
 
 import java.io.Serializable;
 
-import javafx.scene.paint.Paint;
-
 public class Block_serialize implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int no_spheres;
 	private String color;
 	public Block_serialize()

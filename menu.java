@@ -1,29 +1,15 @@
 package application;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
 
 public class menu implements javafx.fxml.Initializable{
 	 @FXML
@@ -56,6 +42,8 @@ public class menu implements javafx.fxml.Initializable{
 
 
 	    }
+	    
+	    Utility ut = new Utility();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -72,7 +60,7 @@ public class menu implements javafx.fxml.Initializable{
 		try
 		{
 			//System.out.println("loaded");
-			sel_player.getSelectionModel().select(load()-2);
+			sel_player.getSelectionModel().select(ut.load()-2);
 		} 
 		catch (ClassNotFoundException | IOException e1) 
 		{
@@ -82,7 +70,7 @@ public class menu implements javafx.fxml.Initializable{
 		btnPlay.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle (ActionEvent e){
-				combineSettings();
+				ut.combineSettings();
 				Normal_Grid ex=new Normal_Grid();
 				Block_serialize[][] sbox=new Block_serialize[9][6];
 				for(int i=0;i<9;i++)
@@ -94,7 +82,7 @@ public class menu implements javafx.fxml.Initializable{
 				}
 				try 
 				{
-					storeGridState(sbox);
+					ut.storeGridState(sbox);
 				} 
 				catch (FileNotFoundException e1) 
 				{
@@ -130,7 +118,7 @@ public class menu implements javafx.fxml.Initializable{
 				String num=sel_player.getValue();
 				try 
 				{
-					setPlayerCount(num);
+					ut.setPlayerCount(num);
 				} 
 				catch (IOException f) 
 				{
@@ -145,7 +133,7 @@ public class menu implements javafx.fxml.Initializable{
 						b[i]=true;
 					}
 					Player_turn obj=new Player_turn(b);
-					set_playerturns(obj);
+					ut.set_playerturns(obj);
 					ex.run(sbox,n,obj,0);
 				} catch (FileNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -163,7 +151,7 @@ public class menu implements javafx.fxml.Initializable{
 			@Override
 			public void handle (ActionEvent e){
 				HD_Grid ex=new HD_Grid();
-				combineSettings();
+				ut.combineSettings();
 				Block_serialize[][] sbox=new Block_serialize[15][10];
 				for(int i=0;i<15;i++)
 				{
@@ -191,7 +179,7 @@ public class menu implements javafx.fxml.Initializable{
 				String num=sel_player.getValue();
 				try 
 				{
-					setPlayerCount(num);
+					ut.setPlayerCount(num);
 				} 
 				catch (IOException f) 
 				{
@@ -206,7 +194,7 @@ public class menu implements javafx.fxml.Initializable{
 						b[i]=true;
 					}
 					Player_turn obj=new Player_turn(b);
-					set_playerturns(obj);
+					ut.set_playerturns(obj);
 					ex.run(sbox,n,obj,0);
 				} 
 				catch (FileNotFoundException e1) 
@@ -242,7 +230,7 @@ public class menu implements javafx.fxml.Initializable{
 				
 				try 
 				{
-					n=load();
+					n=ut.load();
 				} 
 				catch (FileNotFoundException e2) 
 				{
@@ -262,7 +250,7 @@ public class menu implements javafx.fxml.Initializable{
 				Block_serialize[][] sbox=null;
 				try 
 				{
-					sbox=Normal_Grid.get_state();
+					sbox=Utility.get_state();
 				} 
 				catch (FileNotFoundException e) 
 				{
@@ -282,7 +270,7 @@ public class menu implements javafx.fxml.Initializable{
 				Player_turn pl=null;
 				try 
 				{
-					pl=get_playerturns();
+					pl=ut.get_playerturns();
 				} 
 				catch (FileNotFoundException e) 
 				{
@@ -374,174 +362,6 @@ public class menu implements javafx.fxml.Initializable{
         });
 	}
 	
-	public int load() throws FileNotFoundException, IOException, ClassNotFoundException
-	{
-		initializePlayers();
-		int num=0;
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\playerCount.txt";
-		ObjectInputStream input=null;
-		try
-		{
-			input=new ObjectInputStream(new FileInputStream(location));
-			NoPlayers obj=(NoPlayers)input.readObject();
-			//System.out.println("players read");
-			num=obj.getPlayers();
-		}
-		catch(EOFException e)
-		{
-			
-		}
-		input.close();
-		return num;
-	}
-	public void initializePlayers() throws FileNotFoundException, IOException
-	{
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\playerCount.txt";
-		ObjectInputStream input=null;
-		try
-		{
-			input=new ObjectInputStream(new FileInputStream(location));	
-		}
-		catch(EOFException e)
-		{
-			ObjectOutputStream out=null;
-			out=new ObjectOutputStream(new FileOutputStream(location));
-			out.writeObject(new NoPlayers());
-			out.close();
-			return;
-		}
-		finally
-		{
-			input.close();
-		}
-	}
-	public void setPlayerCount(String s) throws IOException
-	{
-		int num=2;
-		if(s.equals("2"))
-		{
-			num=2;
-		}
-		else if(s.equals("3"))
-		{
-			num=3;
-		}
-		else if(s.equals("4"))
-		{
-			num=4;
-		}
-		else if(s.equals("5"))
-		{
-			num=5;
-		}
-		else if(s.equals("6"))
-		{
-			num=6;
-		}
-		else if(s.equals("7"))
-		{
-			num=7;
-		}
-		else if(s.equals("8"))
-		{
-			num=8;
-		}
-		Path currentRelativePath = Paths.get("");
-		s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\playerCount.txt";
-		ObjectOutputStream out=null;
-		out=new ObjectOutputStream(new FileOutputStream(location));
-		NoPlayers obj=new NoPlayers();
-		obj.setPlayers(num);
-		out.writeObject(obj);
-		out.close();
-		return;
-	}
-	
-	public void storeGridState(Block_serialize[][] sbox) throws FileNotFoundException, IOException
-	{
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\Block_state.txt";
-		ObjectOutputStream out=null;
-		out=new ObjectOutputStream(new FileOutputStream(location));
-		out.writeObject(sbox);
-		out.close();
-	}
-	
-	static void set_playerturns(Player_turn obj) throws FileNotFoundException, IOException
-	{
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\Player_turn.txt";
-		ObjectOutputStream out=null;
-		out=new ObjectOutputStream(new FileOutputStream(location));
-		out.writeObject(obj);
-		out.close();
-	}
-	
-	static Player_turn get_playerturns() throws FileNotFoundException, IOException, ClassNotFoundException
-	{
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		String location=s+"\\src\\application";
-		location=location+"\\Player_turn.txt";
-		ObjectInputStream input=null;
-		Player_turn obj=null;
-		try
-		{
-			input=new ObjectInputStream(new FileInputStream(location));
-			obj= (Player_turn)input.readObject();	
-		}
-		catch(EOFException e)
-		{
-			
-			//System.out.println("added");
-			
-		}
-		input.close();
-		return obj;
-	}
-	
-	
-	public void combineSettings()
-	{
-		 	Path currentRelativePath = Paths.get("");
-			String s = currentRelativePath.toAbsolutePath().toString();
-			String location1=s+"\\src\\application";
-			//File folder = new File(location1);
-			//File[] listOfFiles = folder.listFiles();
-			location1=location1+"\\savedSettings.txt";
-			
-			currentRelativePath = Paths.get("");
-			s = currentRelativePath.toAbsolutePath().toString();
-			String location2=s+"\\src\\application";
-			//File folder = new File(location);
-				//File[] listOfFiles = folder.listFiles();
-			location2=location2+"\\tempSetting.txt";
-			
-			try {
-				Individual_Setting.add(location1,Individual_Setting.read(location2));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
 	
 	
 }
