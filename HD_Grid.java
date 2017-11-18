@@ -27,6 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Circle;
@@ -36,6 +37,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.media.AudioClip;
 
 /**
  * <h1> Play Chain Reaction on a 15*10 Grid !!</h1>
@@ -49,6 +51,8 @@ import javafx.collections.ObservableList;
 public class HD_Grid
 {
 	int global_flag=0;
+	 Boolean[] arr=new Boolean[8];
+	 int turn=0;
 	/**
 	 * This class is used to find out which player has won the game
 	 * @author Vipul Saini
@@ -530,6 +534,9 @@ public class HD_Grid
      				String w=flag_obj.getWinner();
      				w=w.substring(0, 1);
      				stage.setOnCloseRequest(e->e.consume());
+     				final java.net.URL resource = getClass().getResource("winning.wav");
+                    final AudioClip clip = new AudioClip(resource.toString());
+                    clip.play();
      				ut.popup(Integer.parseInt(w),btn,btn2,sbox,undo ,grid);
      				global_flag=1;
 	    			/*Alert alert = new Alert(AlertType.INFORMATION);
@@ -627,7 +634,10 @@ public class HD_Grid
         imageView.setFitHeight(17);
         MenuButton menuButton = new MenuButton("", imageView, newGame, exit);
 
-
+        for(int i=0;i<8;i++)
+        {
+        	arr[i]=playerturn.getPlayer()[i];
+        }
         
         
         Button btnUndo = new Button("Undo");
@@ -729,6 +739,13 @@ public class HD_Grid
         
         grid.setOnMouseClicked(event ->
         {
+        	for(int i=0;i<8;i++)
+        	{
+        		arr[i]=playerturn.getPlayer()[i];
+        	}
+        	turn=playerturn.getCur_turn();
+        	final java.net.URL resource = getClass().getResource("Beep1.wav");
+        	final AudioClip clip = new AudioClip(resource.toString());
         	btnUndo.setDisable(false);
         	list.remove(0, list.size());
         	list.addAll(grid.getChildren());
@@ -761,6 +778,7 @@ public class HD_Grid
         	
         	if(box[y][x].getCount() == 0)
         	{
+        		clip.play(0.5);
         		zero(x,y,box,grid,sbox,color,btnNewGame, btnExit,btnUndo,stage);
         		playerturn.increment();
         		try {
@@ -790,6 +808,7 @@ public class HD_Grid
         	}
         	else if(box[y][x].getCount() == 1 && box[y][x].getColor().equals(color))
         	{       
+        		clip.play(0.5);
         		one(x,y,box,grid,sbox,color,playerturn,btnNewGame, btnExit,btnUndo,stage); 
         		playerturn.increment();
         		try {
@@ -818,7 +837,8 @@ public class HD_Grid
         		//currentStatus(sbox);
         	}
         	else if(box[y][x].getCount() == 2 && box[y][x].getColor().equals(color))
-            {        	
+            {      
+        		clip.play(0.5);
         		two(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,stage);  
         		playerturn.increment();
         		try {
@@ -848,6 +868,7 @@ public class HD_Grid
             }
         	else if(box[y][x].getCount() == 3 && box[y][x].getColor().equals(color))
         	{
+        		clip.play(0.5);
         		splitmain(x,y,box,grid,sbox,color,playerturn,btnNewGame,btnExit,btnUndo,stage);
         		playerturn.increment();
         		try {
@@ -881,6 +902,15 @@ public class HD_Grid
         		}
         	}
         	try {
+				ut.store_state(sbox);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	try {
         		playerturn.reset(totnum);
         		playerturn.setCur_turn(0);
         		flag_obj.reset();
@@ -906,6 +936,8 @@ public class HD_Grid
         btnUndo.setOnAction(event->
         {
         	btnUndo.setDisable(true);
+        	playerturn.setPlayer(arr);
+        	playerturn.setCur_turn(turn);
         	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
         	for(int i=0;i<15;i++)
@@ -920,7 +952,6 @@ public class HD_Grid
         			}
         		}
         	}
-        	playerturn.decrement();
         	try {
 				ut.set_playerturns(playerturn);
 			} catch (FileNotFoundException e1) {

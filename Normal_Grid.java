@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.scene.media.AudioClip;
@@ -49,6 +51,8 @@ import javafx.collections.ObservableList;
 public class Normal_Grid
 {
 	int global_flag=0;
+	 Boolean[] arr=new Boolean[8];
+	 int turn=0;
 	/**
 	 * This class is used to find out which player has won the game
 	 * @author Vipul Saini
@@ -602,6 +606,7 @@ public class Normal_Grid
 	public void start(Block_serialize[][] sbox, int totnum, Player_turn playerturn, int res)  throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		global_flag=0;
+		turn=playerturn.getCur_turn();
 		Stage stage=new Stage();
         stage.setTitle("Game");
                
@@ -638,7 +643,11 @@ public class Normal_Grid
         imageView.setFitHeight(17);
         MenuButton menuButton = new MenuButton("", imageView, newGame, exit);
 
-        
+       
+        for(int i=0;i<8;i++)
+        {
+        	arr[i]=playerturn.getPlayer()[i];
+        }
         
         Button btnUndo = new Button("Undo");
         Button btnNewGame = new Button("New Game");
@@ -743,7 +752,16 @@ public class Normal_Grid
         
         grid.setOnMouseClicked(event ->
         {
-        	
+        	for(int i=0;i<8;i++)
+        	{
+        		arr[i]=playerturn.getPlayer()[i];
+        	}
+        	turn=playerturn.getCur_turn();
+        	//System.out.println(turn);
+        	/*for(int i=0;i<8;i++)
+        	{
+        		System.out.print(arr[i]+" yo ");
+        	}*/
         	final java.net.URL resource = getClass().getResource("Beep1.wav");
         	final AudioClip clip = new AudioClip(resource.toString());
         	btnUndo.setDisable(false);
@@ -912,6 +930,16 @@ public class Normal_Grid
         			sbox[i][j].reset();
         		}
         	}
+        	
+        	try {
+				ut.store_state(sbox);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         	try {
         		playerturn.reset(totnum);
         		playerturn.setCur_turn(0);
@@ -929,6 +957,13 @@ public class Normal_Grid
         btnUndo.setOnAction(event->
         {
         	btnUndo.setDisable(true);
+        	playerturn.setPlayer(arr);
+        	playerturn.setCur_turn(turn);
+        	/*for(int i=0;i<8;i++)
+        	{
+        		System.out.print(arr[i]+" hey ");
+        	}*/
+        	//System.out.println();
         	grid.getChildren().remove(0,grid.getChildren().size());
         	grid.getChildren().setAll(list);
         	for(int i=0;i<9;i++)
@@ -943,7 +978,6 @@ public class Normal_Grid
         			}
         		}
         	}
-        	playerturn.decrement();
         	try {
 				ut.set_playerturns(playerturn);
 			} catch (FileNotFoundException e1) {

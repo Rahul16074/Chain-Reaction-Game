@@ -78,7 +78,10 @@ public class Player_turn implements Serializable{
 	 * @param player The first parameter is the Boolean array that has the current status of the game 
 	 */
 	public void setPlayer(Boolean player[]) {
-		this.player = player;
+		for(int i=0;i<8;i++)
+		{
+			this.player[i]=player[i];
+		}
 	}
 	
 	/**
