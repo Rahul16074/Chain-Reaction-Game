@@ -512,7 +512,7 @@ public class HD_Grid
      		
      		if(val==1)
         	{
-     			playerturn.updatePlayer(sbox, 9, 6);
+     			playerturn.updatePlayer(sbox, 15, 10);
      			String col = pcolor[playerturn.getCur_turn()];
      			int tmp = 0;
      			for(Node a: grid.getChildren())

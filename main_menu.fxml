@@ -19,7 +19,7 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <TextField alignment="CENTER" disable="false" editable="false" focusTraversable="false" layoutX="0.0" layoutY="1.0" prefHeight="28.0" prefWidth="298.0" text="CHAIN REACTION">
+    <TextField alignment="CENTER" disable="false" editable="false" focusTraversable="false" layoutX="0.0" layoutY="2.0" prefHeight="28.0" prefWidth="298.0" text="CHAIN REACTION">
       <effect>
         <Lighting>
           <bumpInput>
